@@ -4,6 +4,10 @@ const { tokenVerifierMW } = require("../middleware/tokenAuth");
 const Video = require("../models/videos");
 const { getMongoIdMW } = require("../middleware/getMongoId");
 const checkBodyMW = require("../middleware/checkBody");
+const mongoose = require("mongoose");
+const {
+  Types: { ObjectId },
+} = mongoose; // Import ObjectId
 var router = express.Router();
 
 router.post(
@@ -68,7 +72,7 @@ router.put(
           $addToSet: { totalVote: userMongoID, weeklyVote: userMongoID },
         }
       );
-      console.log(matchedCount , userMongoID)
+      console.log(matchedCount, userMongoID);
       matchedCount
         ? res.json({
             result: true,
@@ -124,5 +128,31 @@ router.put(
     }
   }
 );
+
+router.delete("/:id", tokenVerifierMW, getMongoIdMW, async (req, res) => {
+  const videoID = req.params.id;
+  const userID = req.body.userMongoID;
+  const video = await Video.findOne({
+    _id: videoID,
+  });
+  if (!video) {
+    res.json({
+      result: false,
+      reason: "No such video.",
+    });
+    return;
+  }
+  if (video.author.toString() != userID) {
+    res.json({
+      result: false,
+      reason: "You're not the video owner.",
+    });
+    return;
+  }
+  await Video.deleteOne({ _id: videoID });
+  res.json({
+    result: true,
+  });
+});
 
 module.exports = router;
