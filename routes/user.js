@@ -12,7 +12,6 @@ const { SECRET_PASSWORD_SALT } = process.env;
 const trimBodyFieldsMW = require("../middleware/trimFields");
 const checkBodyMW = require("../middleware/checkBody");
 const { generateToken, tokenVerifierMW } = require("../middleware/tokenAuth");
-const Trick = require("../models/tricks");
 const { populateUser } = require("../models/pipelines/population");
 
 // Route d'inscription
