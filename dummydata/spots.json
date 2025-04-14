@@ -1,0 +1,22 @@
+[
+    {
+        "_id": "60d5ec9af2c5f64e3c7f7722",
+        "name": "Downtown Ledges",
+        "creationDate": "2023-01-10T08:45:00Z",
+        "localisation": {
+            "lat": 40.7128,
+            "lon": -74.0060
+        },
+        "category": "street",
+        "img": [
+            "ledge1.jpg",
+            "ledge2.jpg"
+        ],
+        "creator": "507f1f77bcf86cd799439011",
+        "leaderboard": {
+            "alltime": "60d5ec9af2c5f64e3c7f7733",
+            "week": "60d5ec9af2c5f64e3c7f7734"
+        },
+        "videos": "60d5ec9af2c5f64e3c7f7733"
+    }
+]

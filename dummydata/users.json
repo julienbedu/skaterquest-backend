@@ -1,0 +1,41 @@
+[
+    {
+        "_id": "507f1f77bcf86cd799439011",
+        "username": "Tony Skate",
+        "email": "tony@skate.com",
+        "password": "secure123",
+        "inscriptionDate": "2022-01-15T09:00:00Z",
+        "personalScore": 850,
+        "avatar": "tony.jpg",
+        "friends": [
+            "507f1f77bcf86cd799439012",
+            "507f1f77bcf86cd799439013"
+        ],
+        "crew": "60d5ec9af2c5f64e3c7f7711",
+        "validatedTricks": [
+            "60d5ec9af2c5f64e3c7f7741",
+            "60d5ec9af2c5f64e3c7f7742"
+        ],
+        "videos": [
+            "60d5ec9af2c5f64e3c7f7733"
+        ]
+    },
+    {
+        "_id": "507f1f77bcf86cd799439012",
+        "username": "Ellie Rider",
+        "email": "ellie@skate.com",
+        "password": "skate456",
+        "inscriptionDate": "2022-02-20T10:30:00Z",
+        "personalScore": 720,
+        "avatar": "ellie.jpg",
+        "friends": [
+            "507f1f77bcf86cd799439011"
+        ],
+        "validatedTricks": [
+            "60d5ec9af2c5f64e3c7f7743"
+        ],
+        "videos": [
+            "60d5ec9af2c5f64e3c7f7734"
+        ]
+    }
+]

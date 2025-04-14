@@ -1,0 +1,35 @@
+[
+    {
+        "_id": "60d5ec9af2c5f64e3c7f7733",
+        "creationDate": "2023-05-01T16:20:00Z",
+        "url": "https://video.com/kickflip-ledge",
+        "thumbmailURL": "thumb1.jpg",
+        "author": "507f1f77bcf86cd799439011",
+        "tricks": [
+            "60d5ec9af2c5f64e3c7f7741",
+            "60d5ec9af2c5f64e3c7f7743"
+        ],
+        "spot": "60d5ec9af2c5f64e3c7f7722",
+        "totalVote": [
+            "507f1f77bcf86cd799439012"
+        ],
+        "weeklyVote": [
+            "507f1f77bcf86cd799439012"
+        ]
+    },
+    {
+        "_id": "60d5ec9af2c5f64e3c7f7734",
+        "creationDate": "2023-05-10T14:15:00Z",
+        "url": "https://video.com/heelflip-gap",
+        "thumbmailURL": "thumb2.jpg",
+        "author": "507f1f77bcf86cd799439012",
+        "tricks": [
+            "60d5ec9af2c5f64e3c7f7742"
+        ],
+        "spot": "60d5ec9af2c5f64e3c7f7722",
+        "totalVote": [
+            "507f1f77bcf86cd799439011"
+        ],
+        "weeklyVote": []
+    }
+]

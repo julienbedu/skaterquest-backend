@@ -1,0 +1,17 @@
+[
+    {
+        "_id": "60d5ec9af2c5f64e3c7f7711",
+        "name": "Street Kings",
+        "creationDate": "2022-03-01T14:00:00Z",
+        "members": [
+            {
+                "id": "507f1f77bcf86cd799439011",
+                "admin": true
+            },
+            {
+                "id": "507f1f77bcf86cd799439012",
+                "admin": false
+            }
+        ]
+    }
+]

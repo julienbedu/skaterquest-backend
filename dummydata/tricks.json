@@ -1,0 +1,86 @@
+[
+    {
+      "name": "Kickflip",
+      "description": "The board flips vertically using a toe kick while airborne.",
+      "level": 2,
+      "category": ["KICKFLIP"]
+    },
+    {
+      "name": "Heelflip",
+      "description": "The board flips vertically using a heel flick while airborne.",
+      "level": 2,
+      "category": ["HEELFLIP"]
+    },
+    {
+      "name": "Pop Shuvit",
+      "description": "The board rotates 180 degrees horizontally underfoot without flipping.",
+      "level": 1,
+      "category": ["SHUVIT"]
+    },
+    {
+      "name": "360 Pop Shuvit",
+      "description": "The board makes a full 360-degree horizontal rotation underfoot.",
+      "level": 2,
+      "category": ["360-SHUVIT"]
+    },
+    {
+      "name": "Frontside 180",
+      "description": "A 180-degree rotation where the front side faces the direction of travel.",
+      "level": 1,
+      "category": ["180"]
+    },
+    {
+      "name": "Nollie Kickflip",
+      "description": "Kickflip executed from a nose-ollie stance.",
+      "level": 3,
+      "category": ["NOLLIE", "KICKFLIP"]
+    },
+    {
+      "name": "Switch Heelflip",
+      "description": "Heelflip performed in the opposite stance of your regular footing.",
+      "level": 3,
+      "category": ["SWITCH", "HEELFLIP"]
+    },
+    {
+      "name": "Old School Kickflip",
+      "description": "Classic 80s-style kickflip with front foot extended further back.",
+      "level": 3,
+      "category": ["OLD SCHOOL", "KICKFLIP"]
+    },
+    {
+      "name": "Gap Kickflip",
+      "description": "Kickflip executed while clearing a gap between obstacles.",
+      "level": 3,
+      "category": ["GAP", "KICKFLIP"]
+    },
+    {
+      "name": "Fakie 360",
+      "description": "Full 360-degree body rotation while riding in fakie stance.",
+      "level": 3,
+      "category": ["FACKIE", "360"]
+    },
+    {
+      "name": "Nollie 180",
+      "description": "180-degree rotation initiated from a nose-ollie position.",
+      "level": 2,
+      "category": ["NOLLIE", "180"]
+    },
+    {
+      "name": "360 Flip",
+      "description": "Combination of a kickflip with a 360-degree shuvit rotation.",
+      "level": 3,
+      "category": ["360", "KICKFLIP", "SHUVIT"]
+    },
+    {
+      "name": "Gap Ollie",
+      "description": "Basic ollie executed to clear a gap between two surfaces.",
+      "level": 2,
+      "category": ["GAP"]
+    },
+    {
+      "name": "Fakie Bigspin",
+      "description": "360-degree board spin combined with a 180-degree body varial in fakie stance.",
+      "level": 3,
+      "category": ["FACKIE", "360"]
+    }
+  ]

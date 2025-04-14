@@ -8,7 +8,7 @@ const userSchema = mongoose.Schema({
     inscriptionDate: Date,
     personalScore: Number,
     avatar: String,
-    friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'friends' }],
+    friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'users' }],
     crew: { type: mongoose.Schema.Types.ObjectId, ref: 'crews' },
     validatedTricks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'tricks' }],
     videos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'videos' }],
