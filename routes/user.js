@@ -12,6 +12,8 @@ const { SECRET_PASSWORD_SALT } = process.env;
 const trimBodyFieldsMW = require("../middleware/trimFields");
 const checkBodyMW = require("../middleware/checkBody");
 const { generateToken, tokenVerifierMW } = require("../middleware/tokenAuth");
+const Trick = require("../models/tricks");
+const { populateUser } = require("../models/pipelines/population");
 
 // Route d'inscription
 router.post(
@@ -40,7 +42,7 @@ router.post(
     //tentative de création
     try {
       const data = await newUser.save();
-      res.json({ result: true, token: token, data });
+      res.json({ result: true, token: token });
     } catch (error) {
       // si erreur res => 400
       res
@@ -73,9 +75,10 @@ router.post(
       return;
     }
     //on lui renvoi son p'tit token
+    const { token } = generateToken(email, userExists.uID);
     res.json({
       result: true,
-      token: generateToken(email, userExists.uID),
+      token,
     });
   }
 );
@@ -85,6 +88,26 @@ router.get("/extend", tokenVerifierMW, (req, res) => {
   const { email, uID } = req.body;
   const token = generateToken(email, uID);
   res.json({ result: true, token });
+});
+
+router.get("/", tokenVerifierMW, async (req, res) => {
+  const { uID } = req.body;
+  const user = await User.findOne({ uID }, "-password  -_id");
+  await User.populate(user, populateUser);
+  res.json({
+    result: true,
+    data: user,
+  });
+});
+
+router.get("/:uID", tokenVerifierMW, async (req, res) => {
+  const { uID } = req.params;
+  const user = await User.findOne({ uID }, "-password  -_id");
+  await User.populate(user, populateUser);
+  res.json({
+    result: true,
+    data: user,
+  });
 });
 
 module.exports = router;

@@ -5,7 +5,7 @@ const crewsScheme = mongoose.Schema({
   creationDate: Date,
   members: [
     {
-      id: { type: mongoose.Schema.Types.ObjectId, ref: "users" },
+      user: { type: mongoose.Schema.Types.ObjectId, ref: "users" },
       admin: Boolean,
     },
   ],

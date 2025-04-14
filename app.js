@@ -20,11 +20,17 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(fileUpload());
 
 var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
-var videosRouter = require("./routes/videos");
+var userRouter = require("./routes/user");
+var videoRouter = require("./routes/videos");
+var spotRouter = require("./routes/spot");
+var trickRouter = require("./routes/trick");
+var crewRouter = require("./routes/crew");
 
 app.use("/", indexRouter);
-app.use("/users", usersRouter);
-app.use("/videos", videosRouter);
+app.use("/user", userRouter);
+app.use("/video", videoRouter);
+app.use("/spot", spotRouter);
+app.use("/trick", trickRouter);
+app.use("/crew", crewRouter);
 
 module.exports = app;
