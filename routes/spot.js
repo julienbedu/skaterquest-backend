@@ -2,17 +2,23 @@ var express = require("express");
 const { tokenVerifierMW } = require("../middleware/tokenAuth");
 const checkBodyMW = require("../middleware/checkBody");
 const Spot = require("../models/spots");
-const { getMongoIdMW } = require("../middleware/getMongoId");
 const { populateSpot } = require("../models/pipelines/population");
+const { getUserDataMW } = require("../middleware/getUserData");
 var router = express.Router();
 
 router.post(
   "/",
   checkBodyMW("name", "lon", "lat", "category"),
   tokenVerifierMW,
-  getMongoIdMW,
+  getUserDataMW(),
   async (req, res) => {
-    const { userMongoID, name, lon, lat, category } = req.body;
+    const {
+      userData: { _id: userID },
+      name,
+      lon,
+      lat,
+      category,
+    } = req.body;
 
     const spot = new Spot({
       creationDate: new Date(),
@@ -21,7 +27,7 @@ router.post(
         lat,
         lon,
       },
-      creator: userMongoID,
+      creator: userID,
       category,
       leaderboard: {
         alltime: [],

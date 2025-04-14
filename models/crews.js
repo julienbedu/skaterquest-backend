@@ -4,10 +4,7 @@ const crewsScheme = mongoose.Schema({
   name: String,
   creationDate: Date,
   members: [
-    {
-      user: { type: mongoose.Schema.Types.ObjectId, ref: "users" },
-      admin: Boolean,
-    },
+{ type: mongoose.Schema.Types.ObjectId, ref: "users" }
   ],
 });
 

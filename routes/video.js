@@ -2,22 +2,22 @@ var express = require("express");
 const { uploadVideo } = require("../lib/cloudinaryUpload");
 const { tokenVerifierMW } = require("../middleware/tokenAuth");
 const Video = require("../models/videos");
-const { getMongoIdMW } = require("../middleware/getMongoId");
 const checkBodyMW = require("../middleware/checkBody");
 const mongoose = require("mongoose");
+const { getUserDataMW } = require("../middleware/getUserData");
 const {
   Types: { ObjectId },
-} = mongoose; // Import ObjectId
+} = mongoose; 
 var router = express.Router();
 
 router.post(
   "/",
   checkBodyMW("tricks", "spot"),
   tokenVerifierMW,
-  getMongoIdMW,
+  getUserDataMW(),
   async (req, res) => {
     //get video data
-    const { tricks, spot, userMongoID } = req.body;
+    const { tricks, spot, userData: _id } = req.body;
 
     //upload the video get url
     const { videoFile } = req.files;
@@ -32,7 +32,7 @@ router.post(
       creationDate: new Date(),
       url,
       thumbmailURL: "",
-      author: userMongoID,
+      author: _id,
       tricks,
       spot,
     });
@@ -55,24 +55,18 @@ router.post(
 router.put(
   "/upvote/:videoID",
   tokenVerifierMW,
-  getMongoIdMW,
+  getUserDataMW(),
   async (req, res) => {
-    const _id = req.params.videoID;
-    const { userMongoID } = req.body;
-    if (!_id) {
-      res.status(400).json({
-        result: false,
-        reason: "No video ID.",
-      });
-    }
+    const videoID = req.params.videoID;
+    const { _id: userID } = req.body.userData;
+
     try {
       const { matchedCount } = await Video.updateOne(
-        { _id },
+        { videoID },
         {
-          $addToSet: { totalVote: userMongoID, weeklyVote: userMongoID },
+          $addToSet: { totalVote: userID, weeklyVote: userID },
         }
       );
-      console.log(matchedCount, userMongoID);
       matchedCount
         ? res.json({
             result: true,
@@ -94,21 +88,16 @@ router.put(
 router.put(
   "/unvote/:videoID",
   tokenVerifierMW,
-  getMongoIdMW,
+  getUserDataMW(),
   async (req, res) => {
-    const _id = req.params.videoID;
-    const { userMongoID } = req.body;
-    if (!_id) {
-      res.status(400).json({
-        result: false,
-        reason: "No video ID.",
-      });
-    }
+    const { videoID } = req.params;
+    const { _id: userID } = req.body.userData;
+
     try {
       const { matchedCount } = await Video.updateOne(
-        { _id },
+        { videoID },
         {
-          $pull: { totalVote: userMongoID, weeklyVote: userMongoID },
+          $pull: { totalVote: userID, weeklyVote: userID },
         }
       );
       matchedCount
@@ -129,30 +118,37 @@ router.put(
   }
 );
 
-router.delete("/:id", tokenVerifierMW, getMongoIdMW, async (req, res) => {
-  const videoID = req.params.id;
-  const userID = req.body.userMongoID;
-  const video = await Video.findOne({
-    _id: videoID,
-  });
-  if (!video) {
-    res.json({
-      result: false,
-      reason: "No such video.",
+router.delete(
+  "/:videoID",
+  tokenVerifierMW,
+  getUserDataMW(),
+  async (req, res) => {
+    const { videoID } = req.params;
+    const { _id: userID } = req.body.userData;
+    const video = await Video.findOne({
+      _id: videoID,
     });
-    return;
-  }
-  if (video.author.toString() != userID) {
+
+    if (!video) {
+      res.json({
+        result: false,
+        reason: "No such video.",
+      });
+      return;
+    }
+
+    if (video.author.toString() != userID) {
+      res.json({
+        result: false,
+        reason: "You're not the video owner.",
+      });
+      return;
+    }
+    await Video.deleteOne({ _id: videoID });
     res.json({
-      result: false,
-      reason: "You're not the video owner.",
+      result: true,
     });
-    return;
   }
-  await Video.deleteOne({ _id: videoID });
-  res.json({
-    result: true,
-  });
-});
+);
 
 module.exports = router;
