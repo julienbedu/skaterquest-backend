@@ -6,10 +6,12 @@ const populateVideo = [
   { path: "weeklyVote", select: "-password -_id" },
 ];
 
-const populateCrew = {
-  path: "members.user",
-  select: "-password -_id",
-};
+const populateCrew = [
+  {
+    path: "members",
+    select: "-password -_id",
+  },
+];
 
 const populateUser = [
   { path: "friends", select: "-password -_id" },
