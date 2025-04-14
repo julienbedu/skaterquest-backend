@@ -6,6 +6,8 @@ const User = require("../models/users");
 const uid2 = require("uid2");
 const bcrypt = require("bcrypt");
 
+const { SECRET_PASSWORD_SALT } = process.env;
+
 //Custom Middleware
 const trimBodyFieldsMW = require("../middleware/trimFields");
 const checkBodyMW = require("../middleware/checkBody");
@@ -27,7 +29,7 @@ router.post(
     }
     //generation de son nouveau token
     const { token, uID } = generateToken(email);
-    const hash = bcrypt.hashSync(password, 10);
+    const hash = bcrypt.hashSync(email + password + SECRET_PASSWORD_SALT, 10);
     const newUser = new User({
       username,
       uID,
@@ -62,7 +64,10 @@ router.post(
       return;
     }
     //on verifie son password
-    const validPasword = bcrypt.compareSync(password, userExists.password);
+    const validPasword = bcrypt.compareSync(
+      email + password + SECRET_PASSWORD_SALT,
+      userExists.password
+    );
     if (!validPasword) {
       res.status(401).json({ result: false, reason: "Invalid password" });
       return;
