@@ -14,13 +14,13 @@ const TRICKS_CATEGORY = [
   "HEELFLIP",
 ];
 
-const tricksScheme = mongoose.Schema({
+const trickScheme = mongoose.Schema({
   name: String,
   description: String,
   level: { type: Number, min: 1, max: 3 },
-  categorie: [TRICKS_CATEGORY],
+  category: [TRICKS_CATEGORY],
 });
 
-const Trick = mongoose.model("tricks", tricksScheme);
+const Trick = mongoose.model("tricks", trickScheme);
 
 module.exports = Trick;

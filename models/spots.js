@@ -11,10 +11,10 @@ const spotsScheme = mongoose.Schema({
   img: [String],
   creator: { type: mongoose.Schema.Types.ObjectId, ref: "users" },
   leaderboard: {
-    alltime: { type: mongoose.Schema.Types.ObjectId, ref: "videos" },
-    week: { type: mongoose.Schema.Types.ObjectId, ref: "videos" },
+    alltime: [{ type: mongoose.Schema.Types.ObjectId, ref: "videos" }],
+    week: [{ type: mongoose.Schema.Types.ObjectId, ref: "videos" }],
   },
-  videos: { type: mongoose.Schema.Types.ObjectId, ref: "videos" },
+  videos: [{ type: mongoose.Schema.Types.ObjectId, ref: "videos" }],
 });
 
 const Spot = mongoose.model("spots", spotsScheme);
