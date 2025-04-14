@@ -14,7 +14,8 @@ async function getMongoIdMW(req, res, next) {
     });
     return;
   }
-  const user = await User.findOne({ uID: req.uID }, "_id");
+  console.log(req.body.uID)
+  const user = await User.findOne({ uID: req.body.uID }, "_id");
   if (!user) {
     res.status(400).json({
       result: false,

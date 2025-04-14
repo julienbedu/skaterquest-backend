@@ -10,7 +10,7 @@ router.post(
   "/",
   checkBodyMW("tricks", "spot"),
   tokenVerifierMW,
-  getUserIDMW,
+  getMongoIdMW,
   async (req, res) => {
     //get video data
     const { tricks, spot, userMongoID } = req.body;
@@ -68,6 +68,7 @@ router.put(
           $addToSet: { totalVote: userMongoID, weeklyVote: userMongoID },
         }
       );
+      console.log(matchedCount , userMongoID)
       matchedCount
         ? res.json({
             result: true,
@@ -86,45 +87,42 @@ router.put(
   }
 );
 
-
 router.put(
-    "/unvote/:videoID",
-    tokenVerifierMW,
-    getMongoIdMW,
-    async (req, res) => {
-      const _id = req.params.videoID;
-      const { userMongoID } = req.body;
-      if (!_id) {
-        res.status(400).json({
-          result: false,
-          reason: "No video ID.",
-        });
-      }
-      try {
-        const { matchedCount } = await Video.updateOne(
-          { _id },
-          {
-            $pull: { totalVote: userMongoID, weeklyVote: userMongoID },
-          }
-        );
-        matchedCount
-          ? res.json({
-              result: true,
-            })
-          : res.status(400).json({
-              result: false,
-              reason: "Wrong video ID.",
-            });
-      } catch (error) {
-        res.status(400).json({
-          result: true,
-          reason: "Bad request.",
-          error,
-        });
-      }
+  "/unvote/:videoID",
+  tokenVerifierMW,
+  getMongoIdMW,
+  async (req, res) => {
+    const _id = req.params.videoID;
+    const { userMongoID } = req.body;
+    if (!_id) {
+      res.status(400).json({
+        result: false,
+        reason: "No video ID.",
+      });
     }
-  );
-  
-
+    try {
+      const { matchedCount } = await Video.updateOne(
+        { _id },
+        {
+          $pull: { totalVote: userMongoID, weeklyVote: userMongoID },
+        }
+      );
+      matchedCount
+        ? res.json({
+            result: true,
+          })
+        : res.status(400).json({
+            result: false,
+            reason: "Wrong video ID.",
+          });
+    } catch (error) {
+      res.status(400).json({
+        result: true,
+        reason: "Bad request.",
+        error,
+      });
+    }
+  }
+);
 
 module.exports = router;
