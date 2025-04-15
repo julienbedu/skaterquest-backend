@@ -1,11 +1,39 @@
 var express = require("express");
+var router = express.Router();
 const { tokenVerifierMW } = require("../middleware/tokenAuth");
 const { getUserDataMW } = require("../middleware/getUserData");
 const checkBodyMW = require("../middleware/checkBody");
 const Crew = require("../models/crews");
 const User = require("../models/users");
 const { populateCrew } = require("../models/pipelines/population");
-var router = express.Router();
+
+/*
+### Crews (`/crew`) :
+- POST `/create` 🔒 PROTEGE  
+  Champs obligatoires : `name` (via `checkBodyMW`).  
+  Description : Création d'un nouveau crew.  
+  Réponse :  
+  - Succès : `{ result: true, data: newCrew }`  
+  - Erreur : `Allready part of one crew` (400).
+
+- GET `/:crewID` 🔒 PROTEGE  
+  Description : Récupération des données d'un crew par son ID.  
+  Réponse :  
+  - Succès : `{ result: true, data: crew }`  
+  - Erreur : `Crew not found` (404).
+
+- PUT `/join/:crewID` 🔒 PROTEGE  
+  Description : Rejoindre un crew existant.  
+  Réponse :  
+  - Succès : `{ result: true }`  
+  - Erreurs : `Allready part of one crew`, `Bad crew Id`, `Ooops wtf, bad userID` (400).
+
+- PUT `/leave` 🔒 PROTEGE  
+  Description : Quitter son crew actuel.  
+  Réponse :  
+  - Succès : `{ result: true }`  
+  - Erreurs : `You're not part of any crew`, `Bad crew Id` (400).
+*/
 
 router.post(
   "/create",

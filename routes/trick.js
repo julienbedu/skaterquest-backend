@@ -5,6 +5,25 @@ const User = require("../models/users");
 const { getUserDataMW } = require("../middleware/getUserData");
 var router = express.Router();
 
+/*
+### Figures (Tricks) (`/trick`) :
+- GET `/`  
+  Description : Liste de toutes les figures disponibles.  
+  Réponse : `{ result: true, data: [tricks] }`.
+
+- PUT `/validate/:trickID` 🔒 PROTEGE  
+  Description : Valider une figure pour l'utilisateur connecté.  
+  Réponse :  
+  - Succès : `{ result: true }`  
+  - Erreur : `No such trick` (si l'ID n'existe pas).
+
+- PUT `/invalidate/:trickID` 🔒 PROTEGE  
+  Description : Retirer une validation de figure pour l'utilisateur connecté.  
+  Réponse :  
+  - Succès : `{ result: true }`  
+  - Erreur : `No such trick` (si l'ID n'existe pas).
+*/
+
 router.get("/", async (_, res) => {
   const data = await Trick.find({});
   res.json({

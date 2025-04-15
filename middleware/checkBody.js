@@ -1,12 +1,17 @@
+/*
+    Genère un middleware qui verifie que l'existence des champs passés en 
+    paramètre, renvoie un 400 sinon.
+    Les cas particulier :
+        "" (chaine vide) : est invalide
+        0 (le Number) est valide
+*/
 function checkBodyMW(...fields) {
-  /*
-    Middleware that check for the presence of the supplied field,
-    and send back 400 if abscent.
-    Will also reject empty string
-    */
   return (req, res, next) => {
     for (const field of fields) {
-      if (!req.body[field] || req.body[field] === "") {
+      if (
+        (!req.body[field] || req.body[field] === "") &&
+        !(req.body[field] === 0)
+      ) {
         res.status(400).json({
           result: false,
           reason: `Missing field ${field} in request body`,

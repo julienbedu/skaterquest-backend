@@ -1,17 +1,25 @@
+/*
+Pipeline de population pour les clés étrangère.
+Pour chaque document on fait attention à ne pas inclure de
+données sensible (mots de passe hashé ou mongoID).
+*/
+
 const populateVideo = [
   { path: "spot" },
   { path: "tricks" },
-  { path: "author", select: "-password -_id" },
-  { path: "totalVote", select: "-password -_id" },
-  { path: "weeklyVote", select: "-password -_id" },
+  { path: "author", select: "-password -_id" }, //User
+  { path: "totalVote", select: "-password -_id" }, //User
+  { path: "weeklyVote", select: "-password -_id" }, //User
 ];
 
-const populateCrew = [
-  {
-    path: "members",
-    select: "-password -_id",
-  },
+populateSpot = [
+  { path: "creator", select: "-password -_id" },
+  { path: "leaderboard.alltime", select: "-password -_id" },
+  { path: "leaderboard.week", select: "-password -_id" },
+  { path: "video", populate: populateVideo },
 ];
+
+const populateCrew = [{ path: "members", select: "-password -_id" }]; //User
 
 const populateUser = [
   { path: "friends", select: "-password -_id" },
@@ -24,13 +32,6 @@ const populateUser = [
     path: "videos",
     populate: populateVideo,
   },
-];
-
-populateSpot = [
-  { path: "creator", select: " -password -_id" },
-  { path: "leaderboard.alltime", select: "-password -_id" },
-  { path: "leaderboard.week", select: "-password -_id" },
-  { path: "video", populate: populateVideo },
 ];
 
 module.exports = {

@@ -1,8 +1,8 @@
+/*
+Retourne un middleware qui enlève les espaces en bout de tout les champs données
+en paramètres. 
+*/
 function trimBodyFieldsMW(...fields) {
-  /* 
-    Middleware that remove spaces at the begining and the end of
-    the specified field (if they are string)
-    */
   return function (req, _, next) {
     for (let field of fields) {
       typeof req.body[field] == "string" &&
