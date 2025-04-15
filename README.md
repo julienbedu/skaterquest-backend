@@ -1,4 +1,4 @@
-**Résumé mis à jour des routes Express déployées :**
+**Résumé des routes Express déployées :**
 
 ---
 
@@ -8,14 +8,14 @@
   **Description** : Inscription d'un nouvel utilisateur.  
   **Réponse** :  
   - Succès : `{ result: true, token }`  
-  - Erreurs : `User already exists`, `Database insertion error` (401, 400).
+  - Erreurs : `User already exists` (401), `Database insertion error` (400).
 
 - **POST `/signin`**  
   **Champs obligatoires** : `email`, `password` (via `checkBodyMW`).  
   **Description** : Connexion d'un utilisateur existant.  
   **Réponse** :  
   - Succès : `{ result: true, token }`  
-  - Erreurs : `No such user`, `Invalid password` (400, 401).
+  - Erreurs : `No such user` (400), `Invalid password` (401).
 
 - **GET `/extend`** 🔒 **PROTEGE**  
   **Description** : Renouvellement du token d'authentification.  
@@ -53,14 +53,14 @@
 ### **Spots** (`/spot`) :
 - **POST `/`** 🔒 **PROTEGE**  
   **Champs obligatoires** : `name`, `lon`, `lat`, `category` (via `checkBodyMW`).  
-  **Description** : Création d'un nouveau spot (avec localisation et catégorie).  
+  **Description** : Création d'un nouveau spot.  
   **Réponse** :  
-  - Succès : `{ result: true }`  
+  - Succès : `{ result: true, data: { _id: spotID } }`  
   - Erreur : `400` en cas d'échec d'insertion en base.
 
 - **GET `/:id`** 🔒 **PROTEGE**  
   **Description** : Récupération des données d'un spot par son ID.  
-  **Réponse** : `{ result: true, data: spot }` (ou `false` si non trouvé).
+  **Réponse** : `{ result: Boolean(data), data: spot }`.
 
 ---
 
@@ -70,7 +70,7 @@
   **Description** : Upload d'une vidéo (liée à un spot et des figures).  
   **Réponse** :  
   - Succès : `{ result: true, data: video }`  
-  - Erreurs : `Database insertion error`, échec d'upload Cloudinary (500).
+  - Erreurs : `Database insertion error` (400), échec d'upload Cloudinary (500).
 
 - **PUT `/upvote/:videoID`** 🔒 **PROTEGE**  
   **Description** : Ajouter un vote (upvote) à une vidéo.  
@@ -97,10 +97,16 @@
   **Champs obligatoires** : `name` (via `checkBodyMW`).  
   **Description** : Création d'un nouveau crew.  
   **Réponse** :  
-  - Succès : `{ result: true }`  
-  - Erreur : `Allready part of one crew` (si l'utilisateur appartient déjà à un crew).
+  - Succès : `{ result: true, data: newCrew }`  
+  - Erreur : `Allready part of one crew` (400).
 
-- **PUT `/join/:id`** 🔒 **PROTEGE**  
+- **GET `/:crewID`** 🔒 **PROTEGE**  
+  **Description** : Récupération des données d'un crew par son ID.  
+  **Réponse** :  
+  - Succès : `{ result: true, data: crew }`  
+  - Erreur : `Crew not found` (404).
+
+- **PUT `/join/:crewID`** 🔒 **PROTEGE**  
   **Description** : Rejoindre un crew existant.  
   **Réponse** :  
   - Succès : `{ result: true }`  
@@ -116,6 +122,6 @@
 
 **Notes :**  
 - 🔒 **PROTEGE** : Route nécessitant un token d'authentification valide (`tokenVerifierMW`).  
-- Les champs marqués comme obligatoires (ex: `email`, `name`) sont vérifiés par `checkBodyMW`.  
+- Les champs marqués comme obligatoires sont vérifiés par `checkBodyMW`.  
 - Les réponses d'erreur incluent une clé `reason` pour expliciter la cause.  
 - Les codes HTTP (ex: `400`, `401`) sont utilisés pour les erreurs critiques.
