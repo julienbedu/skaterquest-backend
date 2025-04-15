@@ -106,6 +106,7 @@ router.put(
         result: false,
         reason: "You're not part of any crew.",
       });
+      return;
     }
     const { matchedCount } = await Crew.updateOne(
       { _id: crew },
