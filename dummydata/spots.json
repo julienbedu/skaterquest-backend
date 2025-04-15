@@ -1,22 +1,66 @@
 [
     {
-        "_id": "60d5ec9af2c5f64e3c7f7722",
-        "name": "Downtown Ledges",
-        "creationDate": "2023-01-10T08:45:00Z",
-        "localisation": {
-            "lat": 40.7128,
-            "lon": -74.0060
-        },
-        "category": "street",
-        "img": [
-            "ledge1.jpg",
-            "ledge2.jpg"
-        ],
-        "creator": "507f1f77bcf86cd799439011",
-        "leaderboard": {
-            "alltime": "60d5ec9af2c5f64e3c7f7733",
-            "week": "60d5ec9af2c5f64e3c7f7734"
-        },
-        "videos": "60d5ec9af2c5f64e3c7f7733"
+      "creationDate": "2023-09-20T12:34:56.789Z",
+      "name": "Downtown Skatepark",
+      "location": {
+        "type": "Point",
+        "coordinates": [-118.243683, 34.052235]
+      },
+      "category": ["park"],
+      "img": [
+        "https://example.com/skatepark1.jpg",
+        "https://example.com/skatepark2.jpg"
+      ],
+      "creator": "507f191e810c19729de860ea",
+      "leaderboard": {
+        "alltime": ["615a4b5e8d7a8e1a2b3c4d5e", "615a4b5e8d7a8e1a2b3c4d5f"],
+        "week": ["615a4b5e8d7a8e1a2b3c4d60"]
+      },
+      "videos": [
+        "615a4b5e8d7a8e1a2b3c4d5e",
+        "615a4b5e8d7a8e1a2b3c4d5f",
+        "615a4b5e8d7a8e1a2b3c4d60"
+      ]
+    },
+    {
+      "creationDate": "2023-09-19T08:15:23.456Z",
+      "name": "Central Plaza Rails",
+      "location": {
+        "type": "Point",
+        "coordinates": [-73.985428, 40.748817]
+      },
+      "category": ["street", "flat"],
+      "img": [
+        "https://example.com/plazarails1.jpg"
+      ],
+      "creator": "614a3b5e7d8a9e0a1b2c3d4e",
+      "leaderboard": {
+        "alltime": ["715a4b5e8d7a8e1a2b3c4d61"],
+        "week": []
+      },
+      "videos": [
+        "715a4b5e8d7a8e1a2b3c4d61",
+        "715a4b5e8d7a8e1a2b3c4d62"
+      ]
+    },
+    {
+      "creationDate": "2023-09-18T16:45:12.345Z",
+      "name": "Industrial Zone Hubba",
+      "location": {
+        "type": "Point",
+        "coordinates": [-122.419416, 37.774929]
+      },
+      "category": ["street"],
+      "img": [],
+      "creator": "613a2b4d6c5d7e8f9a0b1c2d",
+      "leaderboard": {
+        "alltime": [],
+        "week": ["815a4b5e8d7a8e1a2b3c4d63"]
+      },
+      "videos": [
+        "815a4b5e8d7a8e1a2b3c4d63",
+        "815a4b5e8d7a8e1a2b3c4d64",
+        "815a4b5e8d7a8e1a2b3c4d65"
+      ]
     }
-]
+  ]
