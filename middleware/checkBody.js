@@ -8,7 +8,7 @@ function checkBodyMW(...fields) {
     for (const field of fields) {
       if (!req.body[field] || req.body[field] === "") {
         res.status(400).json({
-          result: "false",
+          result: false,
           reason: `Missing field ${field} in request body`,
         });
         return;
