@@ -40,6 +40,7 @@ router.post(
       await spot.save();
       res.json({
         result: true,
+        data: { _id: spot._id },
       });
     } catch (error) {
       res.status(400).json({

@@ -42,7 +42,7 @@
   - Succès : `{ result: true }`  
   - Erreur : `No such trick` (si l'ID n'existe pas).
 
-- **PUT `/devalidate/:trickID`** 🔒 **PROTEGE**  
+- **PUT `/invalidate/:trickID`** 🔒 **PROTEGE**  
   **Description** : Retirer une validation de figure pour l'utilisateur connecté.  
   **Réponse** :  
   - Succès : `{ result: true }`  

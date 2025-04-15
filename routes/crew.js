@@ -4,6 +4,7 @@ const { getUserDataMW } = require("../middleware/getUserData");
 const checkBodyMW = require("../middleware/checkBody");
 const Crew = require("../models/crews");
 const User = require("../models/users");
+const { populateCrew } = require("../models/pipelines/population");
 var router = express.Router();
 
 router.post(
@@ -30,6 +31,7 @@ router.post(
       await User.updateOne({ _id: userData._id }, { crew: _id });
       res.json({
         result: true,
+        data: newCrew,
       });
     } catch (error) {
       res.json({
@@ -40,8 +42,25 @@ router.post(
   }
 );
 
+router.get("/:crewID", tokenVerifierMW, async (req, res) => {
+  const { crewID } = req.params;
+  const data = await Crew.findOne({ _id: crewID });
+  if (!data) {
+    res.status(404).json({
+      result: false,
+      reason: "Crew not found.",
+    });
+    return;
+  }
+  await Crew.populate(data, populateCrew);
+  res.json({
+    result: true,
+    data,
+  });
+});
+
 router.put(
-  "/join/:id",
+  "/join/:crewID",
   tokenVerifierMW,
   getUserDataMW("crew"),
   async (req, res) => {
@@ -53,7 +72,7 @@ router.put(
       });
       return;
     }
-    const crewID = req.params.id;
+    const { crewID } = req.params;
     const { matchedCount: crewUpdate } = await Crew.updateOne(
       { _id: crewID },
       {

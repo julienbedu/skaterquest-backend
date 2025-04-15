@@ -40,7 +40,7 @@ router.put(
 );
 
 router.put(
-  "/devalidate/:trickID",
+  "/invalidate/:trickID",
   tokenVerifierMW,
   getUserDataMW(),
   async (req, res) => {
