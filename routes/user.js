@@ -71,7 +71,7 @@ router.post(
       inscriptionDate: new Date(),
     });
     try {
-      const data = await newUser.save();
+      await newUser.save();
       res.json({ result: true, token: token });
     } catch (error) {
       // si erreur d'insertion (pas un email)

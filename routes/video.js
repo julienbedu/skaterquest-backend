@@ -6,6 +6,8 @@ const Video = require("../models/videos");
 const checkBodyMW = require("../middleware/checkBody");
 const mongoose = require("mongoose");
 const { getUserDataMW } = require("../middleware/getUserData");
+const Spot = require("../models/spots");
+const User = require("../models/users");
 const {
   Types: { ObjectId },
 } = mongoose;
@@ -45,7 +47,7 @@ router.post(
   tokenVerifierMW,
   getUserDataMW(),
   async (req, res) => {
-    const { tricks, spot, userData: _id } = req.body;
+    const { tricks, spot, userData } = req.body;
     //upload the video get url
     const { videoFile } = req.files;
     const uploadResult = await uploadVideo(videoFile);
@@ -59,22 +61,29 @@ router.post(
       creationDate: new Date(),
       url,
       thumbmailURL: "",
-      author: _id,
+      author: userData._id,
       tricks,
       spot,
     });
-    //A ajouter :
-    // update Spot et User pour leur rajouter la vidéo
     try {
-      const data = await newVideo.save();
+      //Insert la vidéo et l'ajoute au spot et à l'utilisateur
+      await newVideo.save();
+      await Spot.updateOne(
+        { _id: spot },
+        { $addToSet: { videos: newVideo._id } }
+      );
+      await User.updateOne(
+        { _id: userData._id },
+        { $addToSet: { videos: newVideo._id } }
+      );
       res.json({
         result: true,
-        data,
+        data: newVideo,
       });
     } catch (error) {
       res.status(400).json({
         result: false,
-        reason: "Database insertion error",
+        reason: "Database insertion error : video",
         error,
       });
     }
@@ -153,7 +162,7 @@ router.delete(
   getUserDataMW(),
   async (req, res) => {
     const { videoID } = req.params;
-    const { _id: userID } = req.body.userData;
+    const { userData } = req.body;
     const video = await Video.findOne({
       _id: videoID,
     });
@@ -166,18 +175,31 @@ router.delete(
       return;
     }
 
-    if (video.author.toString() != userID) {
+    if (video.author.toString() != userData._id) {
       res.json({
         result: false,
         reason: "You're not the video owner.",
       });
       return;
     }
-    await Video.deleteOne({ _id: videoID });
-    //A ajouter, enlever la video de Spot et User
-    res.json({
-      result: true,
-    });
+    try {
+      //Suprime la video et la retire de User et de Spot
+      await Video.deleteOne({ _id: videoID });
+      await Spot.updateOne({ _id: video.spot }, { $pull: { videos: videoID } });
+      await User.updateOne(
+        { _id: userData._id },
+        { $pull: { videos: videoID } }
+      );
+      res.json({
+        result: true,
+      });
+    } catch (error) {
+      res.json({
+        result: false,
+        reason: "Database deletion error : video",
+        error,
+      });
+    }
   }
 );
 
