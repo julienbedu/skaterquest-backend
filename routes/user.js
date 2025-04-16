@@ -15,34 +15,33 @@ const User = require("../models/users");
 const { SECRET_PASSWORD_SALT } = process.env;
 
 /*
-### Utilisateurs (`/user`) :
+Utilisateurs (/user)
 
-- POST `/signup`  
-  Champs obligatoires : `email`, `username`, `password` (via `checkBodyMW`).  
-  Description : Inscription d'un nouvel utilisateur.  
-  Réponse :  
-  - Succès : `{ result: true, token }`  
-  - Erreurs : `User already exists` (401), `Database insertion error` (400).
+    POST /signup
+    Champs obligatoires : email, username, password.
+    Description : Inscription d'un nouvel utilisateur.
+    Réponse :
+        Succès : { result: true, token }
+        Erreurs : User already exists (401), Database insertion error (400).
 
-- POST `/signin`  
-  Champs obligatoires : `email`, `password` (via `checkBodyMW`).  
-  Description : Connexion d'un utilisateur existant.  
-  Réponse :  
-  - Succès : `{ result: true, token }`  
-  - Erreurs : `No such user` (400), `Invalid password` (401).
+    POST /signin
+    Champs obligatoires : email, password.
+    Description : Connexion d'un utilisateur existant.
+    Réponse :
+        Succès : { result: true, token }
+        Erreurs : No such user (400), Invalid password (401).
 
-- GET `/extend` 🔒 PROTEGE  
-  Description : Renouvellement du token d'authentification.  
-  Réponse : `{ result: true, token }`.
+    GET /extend 🔒 PROTEGE
+    Description : Renouvellement du token d'authentification.
+    Réponse : { result: true, token }.
 
-- GET `/` 🔒 PROTEGE  
-  Description : Récupération des données de l'utilisateur connecté (sans mot de passe).  
-  Réponse : `{ result: true, data: user }`.
+    GET / 🔒 PROTEGE
+    Description : Récupération des données de l'utilisateur connecté (sans mot de passe).
+    Réponse : { result: true, data: user }.
 
-- GET `/:uID` 🔒 PROTEGE  
-  Description : Récupération des données d'un utilisateur spécifique par son `uID`.  
-  Réponse : `{ result: true, data: user }`.
-
+    GET /:uID 🔒 PROTEGE
+    Description : Récupération des données d'un utilisateur spécifique par son uID.
+    Réponse : { result: true, data: user }.
 */
 
 // Route d'inscription

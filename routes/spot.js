@@ -7,26 +7,25 @@ const { populateSpot } = require("../models/pipelines/population");
 const { getUserDataMW } = require("../middleware/getUserData");
 const { aggregateSpotByLocation } = require("../models/pipelines/aggregation");
 
-/*
-### Spots (`/spot`) :
-- POST `/` 🔒 PROTEGE  
-  Champs obligatoires : `name`, `lon`, `lat`, `category` (via `checkBodyMW`).  
-  Description : Création d'un nouveau spot.
-  Réponse :  
-  - Succès : `{ result: true, data: { _id: spotID } }`  
-  - Erreur : `400` en cas d'échec d'insertion en base.
-             `406` en cas de spot existant à moins de MINIMUM_SPOT_DISTANCE
-            de distance
+/*Spots (/spot)
 
-- GET `/:id` 🔒 PROTEGE  
-  Description : Récupération des données d'un spot par son ID.  
-  Réponse : `{ result: Boolean(data), data: spot }`.
-
- -GET /loc/:lon/:lat/:limit 🔒 PROTEGE
-  Description : Récupère les spots les plus proches d'une localisation (requête géospatiale optimisée via aggregateSpotByLocation).
+    POST / 🔒 PROTEGE
+    Champs obligatoires : name, lon, lat, category.
+    Description : Création d'un nouveau spot.
     Réponse :
-    - Succès : { result: true, data: [spots] }
-    - Aucun résultat/Erreur : { result: false } (status 400).
+        Succès : { result: true, data: { _id: spotID } }
+        Erreurs : 400 (échec d'insertion), 406 (spot trop proche).
+
+    GET /:id 🔒 PROTEGE
+    Description : Récupération des données d'un spot par son ID.
+    Réponse : { result: Boolean(data), data: spot }.
+
+    GET /loc/:lon/:lat/:limit 🔒 PROTEGE
+    Description : Récupère les spots les plus proches d'une localisation.
+    Réponse :
+        Succès : { result: true, data: [spots] }
+        Aucun résultat/Erreur : { result: false } (400).
+
 */
 
 const MINIMUM_SPOT_DISTANCE = 500; //500m

@@ -13,32 +13,32 @@ const {
 } = mongoose;
 
 /*
-Vidéos (`/video`) :
-- POST `/` 🔒 PROTEGE  
-  Champs obligatoires : `tricks`, `spot` (via `checkBodyMW`).  
-  Description : Upload d'une vidéo (liée à un spot et des figures).  
-  Réponse :  
-  - Succès : `{ result: true, data: video }`  
-  - Erreurs : `Database insertion error` (400), échec d'upload Cloudinary (500).
+Vidéos (/video)
 
-- PUT `/upvote/:videoID` 🔒 PROTEGE  
-  Description : Ajouter un vote (upvote) à une vidéo.  
-  Réponse :  
-  - Succès : `{ result: true }`  
-  - Erreurs : `Wrong video ID` (400).
+    POST / 🔒 PROTEGE
+    Champs obligatoires : tricks, spot.
+    Description : Upload d'une vidéo (liée à un spot et des figures).
+    Réponse :
+        Succès : { result: true, data: video }
+        Erreurs : Database insertion error (400), 500 (échec Cloudinary).
 
-- PUT `/unvote/:videoID` 🔒 PROTEGE  
-  Description : Retirer un vote d'une vidéo.  
-  Réponse :  
-  - Succès : `{ result: true }`  
-  - Erreurs : `Wrong video ID` (400).
+    PUT /upvote/:videoID 🔒 PROTEGE
+    Description : Ajouter un vote (upvote) à une vidéo.
+    Réponse :
+        Succès : { result: true }
+        Erreurs : Wrong video ID (400).
 
-- DELETE `/:videoID` 🔒 PROTEGE  
-  Description : Supprimer une vidéo (réservé au propriétaire).  
-  Réponse :  
-  - Succès : `{ result: true }`  
-  - Erreurs : `No such video`, `You're not the video owner` (400).
+    PUT /unvote/:videoID 🔒 PROTEGE
+    Description : Retirer un vote d'une vidéo.
+    Réponse :
+        Succès : { result: true }
+        Erreurs : Wrong video ID (400).
 
+    DELETE /:videoID 🔒 PROTEGE
+    Description : Supprimer une vidéo (réservé au propriétaire).
+    Réponse :
+        Succès : { result: true }
+        Erreurs : No such video, You're not the video owner (400).
 */
 
 router.post(

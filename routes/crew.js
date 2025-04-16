@@ -9,31 +9,50 @@ const { populateCrew } = require("../models/pipelines/population");
 const isUserCrewAdminMW = require("../middleware/isUserCrewAdmin");
 
 /*
-### Crews (`/crew`) :
-- GET `/:crewID` 🔒 PROTEGE  
-  Description : Récupération des données d'un crew par son ID.  
-  Réponse :  
-  - Succès : `{ result: true, data: crew }`  
-  - Erreur : `Crew not found` (404).
+Crews (/crew)
+    GET /:crewID 🔒 PROTEGE
+    Description : Récupération des données d'un crew par son ID.
+    Réponse :
+        Succès : { result: true, data: crew }
+        Erreur : Crew not found (404).
 
-- POST `/create` 🔒 PROTEGE  
-  Champs obligatoires : `name` (via `checkBodyMW`).  
-  Description : Création d'un nouveau crew.  
-  Réponse :  
-  - Succès : `{ result: true, data: newCrew }`  
-  - Erreur : `Allready part of one crew` (400).
+    POST /create 🔒 PROTEGE
+    Champs obligatoires : name.
+    Description : Création d'un nouveau crew.
+    Réponse :
+        Succès : { result: true, data: newCrew }
+        Erreur : Already part of one crew (400).
 
-- PUT `/join/:crewID` 🔒 PROTEGE  
-  Description : Rejoindre un crew existant.  
-  Réponse :  
-  - Succès : `{ result: true }`  
-  - Erreurs : `Allready part of one crew`, `Bad crew Id`, `Ooops wtf, bad userID` (400).
+    PUT /promote/:targetUserID 🔒 PROTEGE 🛡️ ADMIN
+    Description : Promouvoir un membre en administrateur du crew.
+    Réponse :
+        Succès : { result: true }
+        Erreur : Error while promoting user (400).
 
-- PUT `/leave` 🔒 PROTEGE  
-  Description : Quitter son crew actuel.  
-  Réponse :  
-  - Succès : `{ result: true }`  
-  - Erreurs : `You're not part of any crew`, `Bad crew Id` (400).
+    PUT /demote/:targetUserID 🔒 PROTEGE 🛡️ ADMIN
+    Description : Rétrograder un administrateur du crew.
+    Réponse :
+        Succès : { result: true }
+        Erreur : Error while demoting user (400).
+
+    PUT /add/:targetUserID 🔒 PROTEGE 🛡️ ADMIN
+    Description : Ajouter un utilisateur au crew.
+    Réponse :
+        Succès : { result: true }
+        Erreur : User is already part of a crew (400).
+
+    PUT /remove/:targetUserID 🔒 PROTEGE 🛡️ ADMIN
+    Description : Retirer un utilisateur du crew.
+    Réponse :
+        Succès : { result: true }
+        Erreur : Error while removing user (400).
+
+    PUT /leave 🔒 PROTEGE
+    Description : Quitter son crew actuel.
+    Réponse :
+        Succès : { result: true }
+        Erreurs : You're not part of any crew, Bad crew Id (400).
+
 */
 
 router.get("/:crewID", tokenVerifierMW, async (req, res) => {
