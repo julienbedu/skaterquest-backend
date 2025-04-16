@@ -86,7 +86,6 @@ router.post(
       });
       return;
     }
-    console.log(userData);
     const newCrew = new Crew({
       name,
       creationDate: Date.now(),
@@ -154,8 +153,8 @@ router.put(
       { _id: userData.crew },
       {
         $pull: {
-          admins: targetMongoID,
-          members: targetUserID,
+          members: targetMongoID,
+          admins: targetUserID,
         },
       }
     );
