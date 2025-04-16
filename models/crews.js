@@ -4,8 +4,8 @@ const crewsScheme = mongoose.Schema({
   name: String,
   creationDate: Date,
   members: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
+  admins: [String], //uID des admins
 });
-//a rajouter admins (juste uID pour comparer).
 const Crew = mongoose.model("crews", crewsScheme);
 
 module.exports = Crew;
