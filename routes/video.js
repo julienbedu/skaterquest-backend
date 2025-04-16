@@ -1,4 +1,5 @@
 var express = require("express");
+var router = express.Router();
 const { uploadVideo } = require("../lib/cloudinaryUpload");
 const { tokenVerifierMW } = require("../middleware/tokenAuth");
 const Video = require("../models/videos");
@@ -7,8 +8,36 @@ const mongoose = require("mongoose");
 const { getUserDataMW } = require("../middleware/getUserData");
 const {
   Types: { ObjectId },
-} = mongoose; 
-var router = express.Router();
+} = mongoose;
+
+/*
+Vidéos (`/video`) :
+- POST `/` 🔒 PROTEGE  
+  Champs obligatoires : `tricks`, `spot` (via `checkBodyMW`).  
+  Description : Upload d'une vidéo (liée à un spot et des figures).  
+  Réponse :  
+  - Succès : `{ result: true, data: video }`  
+  - Erreurs : `Database insertion error` (400), échec d'upload Cloudinary (500).
+
+- PUT `/upvote/:videoID` 🔒 PROTEGE  
+  Description : Ajouter un vote (upvote) à une vidéo.  
+  Réponse :  
+  - Succès : `{ result: true }`  
+  - Erreurs : `Wrong video ID` (400).
+
+- PUT `/unvote/:videoID` 🔒 PROTEGE  
+  Description : Retirer un vote d'une vidéo.  
+  Réponse :  
+  - Succès : `{ result: true }`  
+  - Erreurs : `Wrong video ID` (400).
+
+- DELETE `/:videoID` 🔒 PROTEGE  
+  Description : Supprimer une vidéo (réservé au propriétaire).  
+  Réponse :  
+  - Succès : `{ result: true }`  
+  - Erreurs : `No such video`, `You're not the video owner` (400).
+
+*/
 
 router.post(
   "/",
@@ -16,9 +45,7 @@ router.post(
   tokenVerifierMW,
   getUserDataMW(),
   async (req, res) => {
-    //get video data
     const { tricks, spot, userData: _id } = req.body;
-
     //upload the video get url
     const { videoFile } = req.files;
     const uploadResult = await uploadVideo(videoFile);
@@ -36,6 +63,8 @@ router.post(
       tricks,
       spot,
     });
+    //A ajouter :
+    // update Spot et User pour leur rajouter la vidéo
     try {
       const data = await newVideo.save();
       res.json({
@@ -145,6 +174,7 @@ router.delete(
       return;
     }
     await Video.deleteOne({ _id: videoID });
+    //A ajouter, enlever la video de Spot et User
     res.json({
       result: true,
     });

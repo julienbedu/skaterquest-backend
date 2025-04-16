@@ -1,11 +1,15 @@
 const User = require("../models/users");
 
+/*
+Gènère un middleware qui va peupler le body de la requète avec les
+informations utilisateurs données en paramètre.
+Toutes les infos sont stockées dans req.body.userData.
+
+_id (le mongoID) est inclu par default
+
+Doit etre appelé APRES le middleware d'authentification.
+*/
 function getUserDataMW(...fields) {
-  /*
-  A middleware that populate the request body with the user
-  objectID (useful for foreigh key) and other field.
-  Must be call AFTER tokenVerifierMW
-  */
   return async function (req, res, next) {
     const { uID } = req.body;
     if (!uID) {
