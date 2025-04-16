@@ -15,12 +15,21 @@ const { aggregateSpotByLocation } = require("../models/pipelines/aggregation");
   Réponse :  
   - Succès : `{ result: true, data: { _id: spotID } }`  
   - Erreur : `400` en cas d'échec d'insertion en base.
+             `406` en cas de spot existant à moins de MINIMUM_SPOT_DISTANCE
+            de distance
 
 - GET `/:id` 🔒 PROTEGE  
   Description : Récupération des données d'un spot par son ID.  
   Réponse : `{ result: Boolean(data), data: spot }`.
+
+ -GET /loc/:lon/:lat/:limit 🔒 PROTEGE
+  Description : Récupère les spots les plus proches d'une localisation (requête géospatiale optimisée via aggregateSpotByLocation).
+    Réponse :
+    - Succès : { result: true, data: [spots] }
+    - Aucun résultat/Erreur : { result: false } (status 400).
 */
 
+const MINIMUM_SPOT_DISTANCE = 500; //500m
 router.post(
   "/",
   checkBodyMW("name", "lon", "lat", "category"),
@@ -34,6 +43,19 @@ router.post(
       lat,
       category,
     } = req.body;
+
+    //Verifie si un spot n'existe pas déjà à moins de MINIMUM_SPOT_DISTANCE
+    const closestSpot = await Spot.aggregate(
+      aggregateSpotByLocation(lon, lat, 1)
+    );
+    if (closestSpot[0]?.distance < MINIMUM_SPOT_DISTANCE) {
+      res.status(406).json({
+        result: false,
+        reason: `Another spot exists at least than ${MINIMUM_SPOT_DISTANCE} m.`,
+        fallback: closestSpot[0]._id, //id du spot proche identifié
+      });
+      return;
+    }
 
     const spot = new Spot({
       creationDate: new Date(),
@@ -51,7 +73,6 @@ router.post(
       videos: [],
     });
 
-    //a rajouter : verifie si autre spot a proximité, si oui => NOPE
     try {
       await spot.save();
       res.json({
