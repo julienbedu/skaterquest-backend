@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const fileUpload = require("express-fileupload");
 
 const bcrypt = require("bcrypt");
 
@@ -154,7 +155,7 @@ router.get("/:uID", tokenVerifierMW, async (req, res) => {
   });
 });
 
-router.post("/avatar", tokenVerifierMW, async (req, res) => {
+router.post("/avatar", fileUpload(), tokenVerifierMW, async (req, res) => {
   const { uID } = req.body;
   const { photoFile } = req.files;
 

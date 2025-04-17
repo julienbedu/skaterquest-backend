@@ -8,12 +8,11 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const cors = require("cors");
-const fileUpload = require("express-fileupload");
+// const fileUpload = require("express-fileupload");
 
 var app = express();
 
-//Middleware globaux (sur toute les routes)
-app.use(fileUpload());
+//Middleware globaux (sur toutes les routes)
 app.use(cors());
 app.use(logger("dev"));
 app.use(express.json());

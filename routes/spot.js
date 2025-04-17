@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const fileUpload = require("express-fileupload");
 
 const { tokenVerifierMW } = require("../middleware/tokenAuth");
 const checkBodyMW = require("../middleware/checkBody");
@@ -7,6 +8,7 @@ const Spot = require("../models/spots");
 const { populateSpot } = require("../models/pipelines/population");
 const { getUserDataMW } = require("../middleware/getUserData");
 const { aggregateSpotByLocation } = require("../models/pipelines/aggregation");
+const { uploadImage } = require("../lib/cloudinaryUpload");
 
 /*Spots (/spot)
 
@@ -116,33 +118,39 @@ router.get("/:spotID", tokenVerifierMW, async (req, res) => {
   });
 });
 
-router.post("/picture/:spotID", tokenVerifierMW, async (req, res) => {
-  const { spotID } = req.params;
-  const { photoFile } = req.files;
+router.post(
+  "/picture/:spotID",
+  fileUpload(),
+  tokenVerifierMW,
+  async (req, res) => {
+    const { spotID } = req.params;
+    const { photoFile } = req.files;
 
-  const uploadResult = await uploadImage(photoFile);
-  if (!uploadResult.result) {
-    res.status(500).json(uploadResult);
-    return;
-  }
+    const uploadResult = await uploadImage(photoFile);
+    if (!uploadResult.result) {
+      res.status(500).json(uploadResult);
+      return;
+    }
 
-  const { url } = uploadResult;
-  try {
-    await Spot.updateOne(
-      { _id: spotID },
-      {
-        addToSet: { img: url },
-      }
-    );
-    res.json({
-      result: true,
-    });
-  } catch (error) {
-    res.json({
-      result: false,
-      reason: "Error while adding spot picture",
-      error,
-    });
+    const { url } = uploadResult;
+    try {
+      await Spot.updateOne(
+        { _id: spotID },
+        {
+          $addToSet: { img: url },
+        }
+      );
+      res.json({
+        result: true,
+      });
+    } catch (error) {
+      res.json({
+        result: false,
+        reason: "Error while adding spot picture",
+        error,
+      });
+    }
   }
-});
+);
+
 module.exports = router;

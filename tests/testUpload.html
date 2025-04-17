@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload with Auth Header</title>
+    <style>
+        img,
+        video {
+            width: 200;
+            height: auto;
+        }
+
+        div {
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+</head>
+
+<body>
+    <input type="text" id="authToken" placeholder="authToken" /> <br>
+    <div>
+
+        user Avatar
+        <form id="userAvatar" enctype="multipart/form-data">
+            <input type="file" name="photoFile" required />
+            <button type="submit">Upload File</button>
+        </form>
+        <img id="avatar">
+    </div>
+    <div>
+
+        spot Photo
+        <input type="text" placeholder="spotID" id="spotID" />
+        <form id="spotPhoto" enctype="multipart/form-data">
+            <input type="file" name="photoFile" required />
+            <button type="submit">Upload File</button>
+        </form>
+
+        <img id="spot">
+    </div>
+
+    <div>
+
+        video
+        <input type="text" placeholder="spotID" id="spotIDvideo" />
+        <input type="text" placeholder="tricksID" id="tricksID" />
+        <form id="video" enctype="multipart/form-data">
+            <input type="file" name="videoFile" required />
+            <button type="submit">Upload File</button>
+        </form>
+        <video id="videoResult"></video>
+    </div>
+
+    <script>
+        const userAvatar = document.getElementById('userAvatar');
+
+        userAvatar.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const authToken = document.getElementById("authToken").value;
+            const formData = new FormData(userAvatar);
+            await fetch('http://localhost:3000/user/avatar', {
+                method: 'POST',
+                headers: {
+                    Accept: "*/*",
+                    'Authorization': authToken
+                },
+                body: formData
+            });
+            const response = await fetch("http://localhost:3000/user/", {
+                method: "GET",
+                headers: { Authorization: authToken }
+            })
+            const { data } = await response.json()
+            document.getElementById("avatar").src = data.avatar
+        });
+
+        const spotPhoto = document.getElementById('spotPhoto');
+
+        spotPhoto.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const spotID = document.getElementById("spotID").value
+            const authToken = document.getElementById("authToken").value;
+            const formData = new FormData(spotPhoto);
+            await fetch('http://localhost:3000/spot/picture/' + spotID, {
+                method: 'POST',
+                headers: {
+                    Accept: "*/*",
+                    'Authorization': authToken
+                },
+                body: formData
+            });
+            const response = await fetch("http://localhost:3000/spot/" + spotID, {
+                method: "GET",
+                headers: { Authorization: authToken }
+            })
+            const { data } = await response.json()
+            document.getElementById("spot").src = data.img[data.img.length - 1]
+        });
+
+        const video = document.getElementById('video');
+
+        video.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const authToken = document.getElementById("authToken").value;
+            const formData = new FormData(video);
+            const spotID = document.getElementById("spotIDvideo").value
+            const tricksID = document.getElementById("tricksID").value
+            formData.append("tricks", tricksID)
+            formData.append("spot", spotID)
+            await fetch('http://localhost:3000/video', {
+                method: 'POST',
+                headers: {
+                    Accept: "*/*",
+                    'Authorization': authToken
+                },
+                body: formData
+            });
+
+            const response = await fetch("http://localhost:3000/spot/" + spotID, {
+                method: "GET",
+                headers: { Authorization: authToken }
+            })
+            const { data } = await response.json()
+            console.log(data)
+            document.getElementById("videoResult").src = data.videos[data.videos.length - 1].url
+        });
+    </script>
+</body>
+
+</html>

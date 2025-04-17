@@ -16,7 +16,7 @@ populateSpot = [
   { path: "creator", select: "-password -_id" },
   { path: "leaderboard.alltime", select: "-password -_id" },
   { path: "leaderboard.week", select: "-password -_id" },
-  { path: "video", populate: populateVideo },
+  { path: "videos", populate: populateVideo },
 ];
 
 const populateCrew = [{ path: "members", select: "-password -_id" }]; //User

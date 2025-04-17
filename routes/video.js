@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const fileUpload = require("express-fileupload");
 
 const { uploadVideo } = require("../lib/cloudinaryUpload");
 const { tokenVerifierMW } = require("../middleware/tokenAuth");
@@ -41,6 +42,7 @@ Vidéos (/video)
 
 router.post(
   "/",
+  fileUpload(),
   checkBodyMW("tricks", "spot"),
   tokenVerifierMW,
   getUserDataMW(),
@@ -48,7 +50,8 @@ router.post(
     const { tricks, spot, userData } = req.body;
     //upload the video get url
     const { videoFile } = req.files;
-    const {uploadResult} = await uploadVideo(videoFile);
+    const  uploadResult  = await uploadVideo(videoFile);
+    console.log(uploadResult);
     if (!uploadResult.result) {
       res.status(500).json(uploadResult);
       return;
