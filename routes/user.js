@@ -2,7 +2,6 @@ var express = require("express");
 var router = express.Router();
 
 const bcrypt = require("bcrypt");
-require("../models/connection"); //utile ?
 
 //Import locaux
 const trimBodyFieldsMW = require("../middleware/trimFields");
@@ -16,24 +15,23 @@ const { SECRET_PASSWORD_SALT } = process.env;
 
 /*
 Utilisateurs (/user)
-
     POST /signup
     Champs obligatoires : email, username, password.
     Description : Inscription d'un nouvel utilisateur.
     Réponse :
-        Succès : { result: true, token }
+        Succès : { result: true, data : {token , uID , username , email} }
         Erreurs : User already exists (401), Database insertion error (400).
-
+    
     POST /signin
     Champs obligatoires : email, password.
     Description : Connexion d'un utilisateur existant.
     Réponse :
-        Succès : { result: true, token }
+        Succès : { result: true, data : {token , uID , username , email} }
         Erreurs : No such user (400), Invalid password (401).
 
     GET /extend 🔒 PROTEGE
     Description : Renouvellement du token d'authentification.
-    Réponse : { result: true, token }.
+    Réponse : { result: true, data : {token} }.
 
     GET / 🔒 PROTEGE
     Description : Récupération des données de l'utilisateur connecté (sans mot de passe).
@@ -71,7 +69,15 @@ router.post(
     });
     try {
       await newUser.save();
-      res.json({ result: true, token: token });
+      res.json({
+        result: true,
+        data: {
+          token,
+          email,
+          uID,
+          username,
+        },
+      });
     } catch (error) {
       // si erreur d'insertion (pas un email)
       res
@@ -89,25 +95,30 @@ router.post(
   async (req, res) => {
     const { email, password } = req.body;
     //on cherche l'user par email
-    const userExists = await User.findOne({ email });
-    if (!userExists) {
+    const user = await User.findOne({ email });
+    if (!user) {
       res.status(400).json({ result: false, reason: "No such user" });
       return;
     }
     //on verifie son mot de passe
     const validPasword = bcrypt.compareSync(
       email + password + SECRET_PASSWORD_SALT,
-      userExists.password
+      user.password
     );
     if (!validPasword) {
       res.status(401).json({ result: false, reason: "Invalid password" });
       return;
     }
     //on lui renvoi son token
-    const { token } = generateToken(email, userExists.uID);
+    const { token } = generateToken(email, user.uID);
     res.json({
       result: true,
-      token,
+      data: {
+        token,
+        email,
+        uID: user.uID,
+        username: user.username,
+      },
     });
   }
 );
@@ -116,7 +127,7 @@ router.post(
 router.get("/extend", tokenVerifierMW, (req, res) => {
   const { email, uID } = req.body;
   const token = generateToken(email, uID);
-  res.json({ result: true, token });
+  res.json({ result: true, data: token });
 });
 
 //Pour obtenir les informations de l'utilisateur connecté.
