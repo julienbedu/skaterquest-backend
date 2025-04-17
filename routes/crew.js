@@ -190,25 +190,33 @@ router.put(
       });
       return;
     }
-    const { matchedCount } = await Crew.updateOne(
-      { _id: userData.crew },
-      { $addToSet: { members: targetMongoID } }
-    );
-    if (matchedCount) {
-      //Ajoute le crew au profil de l'utilisateur cible
-      await User.updateOne(
-        { _id: targetMongoID },
-        { $set: { crew: userData.crew } }
+    try {
+      const { matchedCount } = await Crew.updateOne(
+        { _id: userData.crew },
+        { $addToSet: { members: targetMongoID } }
       );
-      res.json({
-        result: true,
+      if (matchedCount) {
+        //Ajoute le crew au profil de l'utilisateur cible
+        await User.updateOne(
+          { _id: targetMongoID },
+          { $set: { crew: userData.crew } }
+        );
+        res.json({
+          result: true,
+        });
+        return;
+      }
+      res.status(400).json({
+        result: false,
+        reason: "Error while adding user to crew",
       });
-      return;
+    } catch (error) {
+      res.status(400).json({
+        result: false,
+        reason: "Error while adding user to crew",
+        error,
+      });
     }
-    res.status(400).json({
-      result: false,
-      reason: "Error while adding user to crew",
-    });
   }
 );
 
@@ -225,19 +233,26 @@ router.put(
       { _id: userData.crew },
       { $pull: { members: targetMongoID, admins: targetUserID } }
     );
-
-    if (matchedCount) {
-      //Retire le crew de l'utilisateur cible
-      await User.updateOne({ _id: targetMongoID }, { $unset: { crew: "" } });
-      res.json({
-        result: true,
+    try {
+      if (matchedCount) {
+        //Retire le crew de l'utilisateur cible
+        await User.updateOne({ _id: targetMongoID }, { $unset: { crew: "" } });
+        res.json({
+          result: true,
+        });
+        return;
+      }
+      res.status(400).json({
+        result: false,
+        reason: "Error while removing user from crew",
       });
-      return;
+    } catch (error) {
+      res.status(400).json({
+        result: false,
+        reason: "Error while adding usremoving from crew",
+        error,
+      });
     }
-    res.status(400).json({
-      result: false,
-      reason: "Error while removing user from crew",
-    });
   }
 );
 
@@ -254,20 +269,28 @@ router.put(
       });
       return;
     }
-    const { matchedCount } = await Crew.updateOne(
-      { _id: crew },
-      {
-        $pull: {
-          members: _id,
-        },
+    try {
+      const { matchedCount } = await Crew.updateOne(
+        { _id: crew },
+        {
+          $pull: {
+            members: _id,
+          },
+        }
+      );
+      if (matchedCount) {
+        await User.updateOne({ _id }, { $unset: { crew: "" } });
+        res.json({ result: true });
+        return;
       }
-    );
-    if (matchedCount) {
-      await User.updateOne({ _id }, { $unset: { crew: "" } });
-      res.json({ result: true });
-      return;
+      res.json({ result: false, reason: "Bad crew Id" });
+    } catch (error) {
+      res.status(400).json({
+        result: false,
+        reason: "Error while leaving crew",
+        error,
+      });
     }
-    res.json({ result: false, reason: "Bad crew Id" });
   }
 );
 
