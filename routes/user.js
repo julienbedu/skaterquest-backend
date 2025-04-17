@@ -1,5 +1,5 @@
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
 
 const bcrypt = require("bcrypt");
 
@@ -10,6 +10,7 @@ const { generateToken, tokenVerifierMW } = require("../middleware/tokenAuth");
 const { populateUser } = require("../models/pipelines/population");
 
 const User = require("../models/users");
+const { uploadImage } = require("../lib/cloudinaryUpload");
 //Secret pour le hashage des mots de passe
 const { SECRET_PASSWORD_SALT } = process.env;
 
@@ -151,6 +152,31 @@ router.get("/:uID", tokenVerifierMW, async (req, res) => {
     result: true,
     data: user,
   });
+});
+
+router.post("/avatar", tokenVerifierMW, async (req, res) => {
+  const { uID } = req.body;
+  const { photoFile } = req.files;
+
+  const uploadResult = await uploadImage(photoFile);
+  console.log(uploadResult);
+  if (!uploadResult.result) {
+    res.status(500).json(uploadResult);
+    return;
+  }
+  const { url } = uploadResult;
+  try {
+    await User.updateOne({ uID }, { avatar: url });
+    res.json({
+      result: true,
+    });
+  } catch (error) {
+    res.json({
+      result: false,
+      reason: "Error while adding user avatar",
+      error,
+    });
+  }
 });
 
 module.exports = router;

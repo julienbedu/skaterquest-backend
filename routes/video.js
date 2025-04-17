@@ -1,16 +1,14 @@
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
+
 const { uploadVideo } = require("../lib/cloudinaryUpload");
 const { tokenVerifierMW } = require("../middleware/tokenAuth");
 const Video = require("../models/videos");
 const checkBodyMW = require("../middleware/checkBody");
-const mongoose = require("mongoose");
+
 const { getUserDataMW } = require("../middleware/getUserData");
 const Spot = require("../models/spots");
 const User = require("../models/users");
-const {
-  Types: { ObjectId },
-} = mongoose;
 
 /*
 Vidéos (/video)
@@ -50,8 +48,8 @@ router.post(
     const { tricks, spot, userData } = req.body;
     //upload the video get url
     const { videoFile } = req.files;
-    const uploadResult = await uploadVideo(videoFile);
-    if (uploadResult.result) {
+    const {uploadResult} = await uploadVideo(videoFile);
+    if (!uploadResult.result) {
       res.status(500).json(uploadResult);
       return;
     }
