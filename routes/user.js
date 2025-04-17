@@ -16,32 +16,40 @@ const { uploadImage } = require("../lib/cloudinaryUpload");
 const { SECRET_PASSWORD_SALT } = process.env;
 
 /*
-Utilisateurs (/user)
-    POST /signup
-    Champs obligatoires : email, username, password.
-    Description : Inscription d'un nouvel utilisateur.
-    Réponse :
-        Succès : { result: true, data : {token , uID , username , email} }
-        Erreurs : User already exists (401), Database insertion error (400).
-    
-    POST /signin
-    Champs obligatoires : email, password.
-    Description : Connexion d'un utilisateur existant.
-    Réponse :
-        Succès : { result: true, data : {token , uID , username , email} }
-        Erreurs : No such user (400), Invalid password (401).
+### User (/user)
 
-    GET /extend 🔒 PROTEGE
-    Description : Renouvellement du token d'authentification.
-    Réponse : { result: true, data : {token} }.
+- POST /signup  
+  *Champs obligatoires : `email`, `username`, `password`*  
+  *Description* : Inscription d'un nouvel utilisateur.  
+  *Réponse* :  
+  - Succès : `{ result: true, data: { token, uID, username, email } }`  
+  - Erreurs : `401` (utilisateur existant), `400` (erreur base de données).  
 
-    GET / 🔒 PROTEGE
-    Description : Récupération des données de l'utilisateur connecté (sans mot de passe).
-    Réponse : { result: true, data: user }.
+- POST /signin  
+  *Champs obligatoires : `email`, `password`*  
+  *Description* : Connexion d'un utilisateur.  
+  *Réponse* :  
+  - Succès : `{ result: true, data: { token, uID, username, email } }`  
+  - Erreurs : `400` (utilisateur inexistant), `401` (mot de passe invalide).  
 
-    GET /:uID 🔒 PROTEGE
-    Description : Récupération des données d'un utilisateur spécifique par son uID.
-    Réponse : { result: true, data: user }.
+- GET /extend 🔒 PROTEGE  
+  *Description* : Renouvellement du token.  
+  *Réponse* : `{ result: true, data: { token } }`.  
+
+- GET / 🔒 PROTEGE  
+  *Description* : Récupération des données de l'utilisateur connecté.  
+  *Réponse* : `{ result: true, data: user }`.  
+
+- GET /:uID 🔒 PROTEGE  
+  *Description* : Récupération des données d'un utilisateur par son uID.  
+  *Réponse* : `{ result: true, data: user }`.  
+
+- POST /avatar 🔒 PROTEGE 📤 FICHIER  
+  *Description* : Mise à jour de l'avatar utilisateur.  
+  *Réponse* :  
+  - Succès : `{ result: true }`  
+  - Erreur : `500` (échec Cloudinary), `400` (erreur de mise à jour).  
+
 */
 
 // Route d'inscription

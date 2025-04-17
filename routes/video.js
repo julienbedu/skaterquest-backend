@@ -12,32 +12,33 @@ const Spot = require("../models/spots");
 const User = require("../models/users");
 
 /*
-Vidéos (/video)
+### Video (/video)
+- POST / 🔒 PROTEGE 📤 FICHIER  
+  *Champs obligatoires : `tricks`, `spot`*  
+  *Description* : Upload d'une vidéo liée à un spot et des figures.  
+  *Réponse* :  
+  - Succès : `{ result: true, data: video }`  
+  - Erreurs : `400` (erreur base de données), `500` (échec Cloudinary).  
 
-    POST / 🔒 PROTEGE
-    Champs obligatoires : tricks, spot.
-    Description : Upload d'une vidéo (liée à un spot et des figures).
-    Réponse :
-        Succès : { result: true, data: video }
-        Erreurs : Database insertion error (400), 500 (échec Cloudinary).
+- PUT /upvote/:videoID 🔒 PROTEGE  
+  *Description* : Ajouter un upvote à une vidéo.  
+  *Réponse* :  
+  - Succès : `{ result: true }`  
+  - Erreur : `400` (ID incorrect).  
 
-    PUT /upvote/:videoID 🔒 PROTEGE
-    Description : Ajouter un vote (upvote) à une vidéo.
-    Réponse :
-        Succès : { result: true }
-        Erreurs : Wrong video ID (400).
+- PUT /unvote/:videoID 🔒 PROTEGE  
+  *Description* : Retirer un vote d'une vidéo.  
+  *Réponse* :  
+  - Succès : `{ result: true }`  
+  - Erreur : `400` (ID incorrect).  
 
-    PUT /unvote/:videoID 🔒 PROTEGE
-    Description : Retirer un vote d'une vidéo.
-    Réponse :
-        Succès : { result: true }
-        Erreurs : Wrong video ID (400).
+- DELETE /:videoID 🔒 PROTEGE  
+  *Description* : Supprimer une vidéo (réservé au propriétaire).  
+  *Réponse* :  
+  - Succès : `{ result: true }`  
+  - Erreurs : `400` (vidéo inexistante, utilisateur non propriétaire).  
 
-    DELETE /:videoID 🔒 PROTEGE
-    Description : Supprimer une vidéo (réservé au propriétaire).
-    Réponse :
-        Succès : { result: true }
-        Erreurs : No such video, You're not the video owner (400).
+---
 */
 
 router.post(

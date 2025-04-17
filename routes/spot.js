@@ -10,24 +10,30 @@ const { getUserDataMW } = require("../middleware/getUserData");
 const { aggregateSpotByLocation } = require("../models/pipelines/aggregation");
 const { uploadImage } = require("../lib/cloudinaryUpload");
 
-/*Spots (/spot)
+/*
+### Spot (/spot)
+- POST / 🔒 PROTEGE  
+  *Champs obligatoires : `name`, `lon`, `lat`, `category`*  
+  *Description* : Création d'un nouveau spot.  
+  *Réponse* :  
+  - Succès : `{ result: true, data: { _id: spotID } }`  
+  - Erreurs : `400` (échec d'insertion), `406` (spot trop proche).  
 
-    POST / 🔒 PROTEGE
-    Champs obligatoires : name, lon, lat, category.
-    Description : Création d'un nouveau spot.
-    Réponse :
-        Succès : { result: true, data: { _id: spotID } }
-        Erreurs : 400 (échec d'insertion), 406 (spot trop proche).
+- GET /loc/:lon/:lat/:limit 🔒 PROTEGE  
+  *Description* : Récupère les spots les plus proches d'une localisation.  
+  *Réponse* :  
+  - Succès : `{ result: true, data: [spots] }`  
+  - Erreur : `400` (aucun résultat ou erreur).  
 
-    GET /:id 🔒 PROTEGE
-    Description : Récupération des données d'un spot par son ID.
-    Réponse : { result: Boolean(data), data: spot }.
+- GET /:spotID 🔒 PROTEGE  
+  *Description* : Récupération des données d'un spot par son ID.  
+  *Réponse* : `{ result: Boolean(data), data: spot }`.  
 
-    GET /loc/:lon/:lat/:limit 🔒 PROTEGE
-    Description : Récupère les spots les plus proches d'une localisation.
-    Réponse :
-        Succès : { result: true, data: [spots] }
-        Aucun résultat/Erreur : { result: false } (400).
+- POST /picture/:spotID 🔒 PROTEGE 📤 FICHIER  
+  *Description* : Ajoute une image à un spot.  
+  *Réponse* :  
+  - Succès : `{ result: true }`  
+  - Erreurs : `500` (échec Cloudinary), `400` (erreur de mise à jour).  
 
 */
 
