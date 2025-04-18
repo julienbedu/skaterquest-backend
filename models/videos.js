@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const videosScheme = mongoose.Schema({
   creationDate: Date,
   url: String,
-  thumbmailURL: String,
+  thumbnailURL: String,
   author: { type: mongoose.Schema.Types.ObjectId, ref: "users" },
   tricks: [{ type: mongoose.Schema.Types.ObjectId, ref: "tricks" }],
   spot: { type: mongoose.Schema.Types.ObjectId, ref: "spots" },

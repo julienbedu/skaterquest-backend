@@ -51,7 +51,7 @@ router.post(
     const { tricks, spot, userData } = req.body;
     //upload the video get url
     const { videoFile } = req.files;
-    const  uploadResult  = await uploadVideo(videoFile);
+    const uploadResult = await uploadVideo(videoFile);
     console.log(uploadResult);
     if (!uploadResult.result) {
       res.status(500).json(uploadResult);
@@ -62,7 +62,7 @@ router.post(
     const newVideo = new Video({
       creationDate: new Date(),
       url,
-      thumbmailURL: "",
+      thumbnailURL: "",
       author: userData._id,
       tricks,
       spot,
