@@ -107,7 +107,7 @@
             const authToken = document.getElementById("authToken").value;
             const formData = new FormData(video);
             const spotID = document.getElementById("spotIDvideo").value
-            const tricks = document.getElementById("tricks").value.split(",")
+            const tricks = document.getElementById("tricksID").value.split(",")
             for (let trick of tricks) {
                 formData.append("tricks", trick)
             }

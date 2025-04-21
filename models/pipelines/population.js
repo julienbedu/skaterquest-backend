@@ -7,15 +7,18 @@ données sensible (mots de passe hashé ou mongoID).
 const populateVideo = [
   { path: "spot" },
   { path: "author", select: "-password -_id" }, //User
-  { path: "totalVote", select: "-password -_id" }, //User
-  { path: "weeklyVote", select: "-password -_id" }, //User
+  { path: "votes", select: "-password -_id" }, //User
 ];
 
 populateSpot = [
   { path: "creator", select: "-password -_id" },
   { path: "leaderboard.alltime", select: "-password -_id" },
   { path: "leaderboard.week", select: "-password -_id" },
-  { path: "videos", populate: populateVideo },
+  {
+    path: "videos",
+    populate: populateVideo,
+    options: { sort: { voteCount: -1 } },
+  },
 ];
 
 const populateCrew = [{ path: "members", select: "-password -_id" }]; //User

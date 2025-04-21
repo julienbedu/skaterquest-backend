@@ -100,13 +100,13 @@ router.put(
     const { _id: userID } = req.body.userData;
 
     try {
-      const result = await Video.updateOne(
-        { _id : videoID },
+      const result = await Video.findOneAndUpdate(
+        { _id: videoID },
         {
-          $addToSet: { totalVote: userID },
+          $addToSet: { votes: userID },
         }
       );
-      result.matchedCount
+      result
         ? res.json({
             result: true,
           })
@@ -133,13 +133,13 @@ router.put(
     const { _id: userID } = req.body.userData;
 
     try {
-      const { matchedCount } = await Video.updateOne(
-        { _id : videoID },
+      const result = await Video.findOneAndUpdate(
+        { _id: videoID },
         {
-          $pull: { $totalVote: userID, $weeklyVote: userID },
+          $pull: { votes: userID },
         }
       );
-      matchedCount
+      result
         ? res.json({
             result: true,
           })
