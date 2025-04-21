@@ -6,7 +6,6 @@ données sensible (mots de passe hashé ou mongoID).
 
 const populateVideo = [
   { path: "spot" },
-  { path: "tricks" },
   { path: "author", select: "-password -_id" }, //User
   { path: "totalVote", select: "-password -_id" }, //User
   { path: "weeklyVote", select: "-password -_id" }, //User
@@ -27,7 +26,6 @@ const populateUser = [
     path: "crew",
     populate: populateCrew,
   },
-  { path: "validatedTricks" },
   {
     path: "videos",
     populate: populateVideo,

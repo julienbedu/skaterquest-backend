@@ -25,14 +25,12 @@ var indexRouter = require("./routes/index");
 var userRouter = require("./routes/user");
 var videoRouter = require("./routes/video");
 var spotRouter = require("./routes/spot");
-var trickRouter = require("./routes/trick");
 var crewRouter = require("./routes/crew");
 
 app.use("/", indexRouter);
 app.use("/user", userRouter);
 app.use("/video", videoRouter);
 app.use("/spot", spotRouter);
-app.use("/trick", trickRouter);
 app.use("/crew", crewRouter);
 
 module.exports = app;

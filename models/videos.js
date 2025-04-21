@@ -5,7 +5,7 @@ const videosScheme = mongoose.Schema({
   url: String,
   thumbnailURL: String,
   author: { type: mongoose.Schema.Types.ObjectId, ref: "users" },
-  tricks: [{ type: mongoose.Schema.Types.ObjectId, ref: "tricks" }],
+  tricks: [String],
   spot: { type: mongoose.Schema.Types.ObjectId, ref: "spots" },
   totalVote: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
   weeklyVote: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],

@@ -10,7 +10,6 @@ const userSchema = mongoose.Schema({
   avatar: String,
   friends: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
   crew: { type: mongoose.Schema.Types.ObjectId, ref: "crews" },
-  validatedTricks: [{ type: mongoose.Schema.Types.ObjectId, ref: "tricks" }],
   videos: [{ type: mongoose.Schema.Types.ObjectId, ref: "videos" }],
 });
 
