@@ -37,7 +37,7 @@ const { uploadImage } = require("../lib/cloudinaryUpload");
 
 */
 
-const MINIMUM_SPOT_DISTANCE = 500; //500m
+const MINIMUM_SPOT_DISTANCE = 100; //500m
 router.post(
   "/",
   checkBodyMW("name", "lon", "lat", "category"),
@@ -60,7 +60,7 @@ router.post(
       res.status(406).json({
         result: false,
         reason: `Another spot exists at least than ${MINIMUM_SPOT_DISTANCE} m.`,
-        fallback: closestSpot[0]._id, //id du spot proche identifié
+        fallback: closestSpot[0], //id du spot proche identifié
       });
       return;
     }
@@ -83,9 +83,10 @@ router.post(
 
     try {
       await spot.save();
+      await Spot.populate(spot, populateSpot);
       res.json({
         result: true,
-        data: { _id: spot._id },
+        data: spot,
       });
     } catch (error) {
       res.status(400).json({
