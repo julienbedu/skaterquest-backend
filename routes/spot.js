@@ -37,7 +37,7 @@ const { uploadImage } = require("../lib/cloudinaryUpload");
 
 */
 
-const MINIMUM_SPOT_DISTANCE = 500; //500m
+const MINIMUM_SPOT_DISTANCE = 100; //500m
 router.post(
   "/",
   checkBodyMW("name", "lon", "lat", "category"),
@@ -60,7 +60,7 @@ router.post(
       res.status(406).json({
         result: false,
         reason: `Another spot exists at least than ${MINIMUM_SPOT_DISTANCE} m.`,
-        fallback: closestSpot[0]._id, //id du spot proche identifié
+        fallback: closestSpot[0], //id du spot proche identifié
       });
       return;
     }
@@ -83,9 +83,10 @@ router.post(
 
     try {
       await spot.save();
+      await Spot.populate(spot, populateSpot);
       res.json({
         result: true,
-        data: { _id: spot._id },
+        data: spot,
       });
     } catch (error) {
       res.status(400).json({
@@ -97,31 +98,45 @@ router.post(
 );
 
 router.get("/loc/:lon/:lat/:limit", tokenVerifierMW, async (req, res) => {
-  const lat = parseFloat(req.params.lat);
-  const lon = parseFloat(req.params.lon);
-  const limit = parseInt(req.params.limit);
-  const data = await Spot.aggregate(aggregateSpotByLocation(lon, lat, limit));
-
-  if (!data) {
-    res.status(400).json({
-      result: false,
+  try {
+    const lat = parseFloat(req.params.lat);
+    const lon = parseFloat(req.params.lon);
+    const limit = parseInt(req.params.limit);
+    const data = await Spot.aggregate(aggregateSpotByLocation(lon, lat, limit));
+    Spot.populate(data, populateSpot);
+    if (!data) {
+      res.status(400).json({
+        result: false,
+      });
+      return;
+    }
+    res.json({
+      result: true,
+      data,
     });
-    return;
+  } catch (error) {
+    res.json({
+      result: false,
+      error,
+    });
   }
-  res.json({
-    result: true,
-    data,
-  });
 });
 
 router.get("/:spotID", tokenVerifierMW, async (req, res) => {
   const { spotID } = req.params;
-  const data = await Spot.findOne({ _id: spotID });
-  await Spot.populate(data, populateSpot);
-  res.json({
-    result: Boolean(data),
-    data,
-  });
+  try {
+    const data = await Spot.findOne({ _id: spotID });
+    await Spot.populate(data, populateSpot);
+    res.json({
+      result: Boolean(data),
+      data,
+    });
+  } catch (error) {
+    res.json({
+      result: false,
+      error,
+    });
+  }
 });
 
 router.post(

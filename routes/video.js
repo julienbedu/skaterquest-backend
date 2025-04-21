@@ -52,7 +52,6 @@ router.post(
     //upload the video get url
     const { videoFile } = req.files;
     const uploadResult = await uploadVideo(videoFile);
-    console.log(uploadResult);
     if (!uploadResult.result) {
       res.status(500).json(uploadResult);
       return;
@@ -101,13 +100,13 @@ router.put(
     const { _id: userID } = req.body.userData;
 
     try {
-      const { matchedCount } = await Video.updateOne(
-        { videoID },
+      const result = await Video.findOneAndUpdate(
+        { _id: videoID },
         {
-          $addToSet: { totalVote: userID, weeklyVote: userID },
+          $addToSet: { votes: userID },
         }
       );
-      matchedCount
+      result
         ? res.json({
             result: true,
           })
@@ -134,13 +133,13 @@ router.put(
     const { _id: userID } = req.body.userData;
 
     try {
-      const { matchedCount } = await Video.updateOne(
-        { videoID },
+      const result = await Video.findOneAndUpdate(
+        { _id: videoID },
         {
-          $pull: { totalVote: userID, weeklyVote: userID },
+          $pull: { votes: userID },
         }
       );
-      matchedCount
+      result
         ? res.json({
             result: true,
           })
