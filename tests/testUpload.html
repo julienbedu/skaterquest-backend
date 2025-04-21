@@ -107,8 +107,10 @@
             const authToken = document.getElementById("authToken").value;
             const formData = new FormData(video);
             const spotID = document.getElementById("spotIDvideo").value
-            const tricksID = document.getElementById("tricksID").value
-            formData.append("tricks", tricksID)
+            const tricks = document.getElementById("tricks").value.split(",")
+            for (let trick of tricks) {
+                formData.append("tricks", trick)
+            }
             formData.append("spot", spotID)
             await fetch('http://localhost:3000/video', {
                 method: 'POST',

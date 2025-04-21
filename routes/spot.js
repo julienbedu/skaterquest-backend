@@ -97,31 +97,45 @@ router.post(
 );
 
 router.get("/loc/:lon/:lat/:limit", tokenVerifierMW, async (req, res) => {
-  const lat = parseFloat(req.params.lat);
-  const lon = parseFloat(req.params.lon);
-  const limit = parseInt(req.params.limit);
-  const data = await Spot.aggregate(aggregateSpotByLocation(lon, lat, limit));
-
-  if (!data) {
-    res.status(400).json({
-      result: false,
+  try {
+    const lat = parseFloat(req.params.lat);
+    const lon = parseFloat(req.params.lon);
+    const limit = parseInt(req.params.limit);
+    const data = await Spot.aggregate(aggregateSpotByLocation(lon, lat, limit));
+    Spot.populate(data, populateSpot);
+    if (!data) {
+      res.status(400).json({
+        result: false,
+      });
+      return;
+    }
+    res.json({
+      result: true,
+      data,
     });
-    return;
+  } catch (error) {
+    res.json({
+      result: false,
+      error,
+    });
   }
-  res.json({
-    result: true,
-    data,
-  });
 });
 
 router.get("/:spotID", tokenVerifierMW, async (req, res) => {
   const { spotID } = req.params;
-  const data = await Spot.findOne({ _id: spotID });
-  await Spot.populate(data, populateSpot);
-  res.json({
-    result: Boolean(data),
-    data,
-  });
+  try {
+    const data = await Spot.findOne({ _id: spotID });
+    await Spot.populate(data, populateSpot);
+    res.json({
+      result: Boolean(data),
+      data,
+    });
+  } catch (error) {
+    res.json({
+      result: false,
+      error,
+    });
+  }
 });
 
 router.post(
