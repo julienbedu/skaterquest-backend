@@ -188,4 +188,18 @@ router.post("/avatar", fileUpload(), tokenVerifierMW, async (req, res) => {
   }
 });
 
+router.get("/search/:searchTerm", tokenVerifierMW, async (req, res) => {
+  const { searchTerm } = req.params;
+  const data = await User.find(
+    {
+      username: { $regex: new RegExp(searchTerm, "gi") },
+    },
+    "-password -_id"
+  );
+  res.json({
+    result: true,
+    data,
+  });
+});
+
 module.exports = router;
