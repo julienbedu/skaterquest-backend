@@ -168,7 +168,6 @@ router.post("/avatar", fileUpload(), tokenVerifierMW, async (req, res) => {
   const { photoFile } = req.files;
 
   const uploadResult = await uploadImage(photoFile);
-  console.log(uploadResult);
   if (!uploadResult.result) {
     res.status(500).json(uploadResult);
     return;
@@ -190,12 +189,9 @@ router.post("/avatar", fileUpload(), tokenVerifierMW, async (req, res) => {
 
 router.get("/search/:searchTerm", tokenVerifierMW, async (req, res) => {
   const { searchTerm } = req.params;
-  const data = await User.find(
-    {
-      username: { $regex: new RegExp(searchTerm, "gi") },
-    },
-    "-password -_id"
-  );
+  const data = await User.find({
+    username: { $regex: new RegExp(searchTerm, "gi") },
+  }, "-password -_id");
   res.json({
     result: true,
     data,
