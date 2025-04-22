@@ -50,6 +50,7 @@ router.post(
   async (req, res) => {
     const { tricks, spot, userData } = req.body;
     //upload the video get url
+    console.log("video received");
     const { videoFile } = req.files;
     const uploadResult = await uploadVideo(videoFile);
     if (!uploadResult.result) {
@@ -57,6 +58,7 @@ router.post(
       return;
     }
     const { url } = uploadResult;
+    console.log("upload ok : ", url);
 
     const newVideo = new Video({
       creationDate: new Date(),
@@ -77,6 +79,8 @@ router.post(
         { _id: userData._id },
         { $addToSet: { videos: newVideo._id } }
       );
+
+      console.log("insertion ok");
       res.json({
         result: true,
         data: newVideo,
