@@ -44,7 +44,7 @@ const User = require("../models/users");
 router.post(
   "/",
   fileUpload(),
-  checkBodyMW("tricks", "spot"),
+  checkBodyMW("spot"),
   tokenVerifierMW,
   getUserDataMW(),
   async (req, res) => {
@@ -63,7 +63,7 @@ router.post(
       url,
       thumbnailURL: "",
       author: userData._id,
-      tricks,
+      tricks: tricks ?? [],
       spot,
     });
     try {
