@@ -12,8 +12,6 @@ const populateVideo = [
 
 populateSpot = [
   { path: "creator", select: "-password -_id" },
-  { path: "leaderboard.alltime", select: "-password -_id" },
-  { path: "leaderboard.week", select: "-password -_id" },
   {
     path: "videos",
     populate: populateVideo,

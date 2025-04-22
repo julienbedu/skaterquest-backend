@@ -103,13 +103,13 @@ router.get("/loc/:lon/:lat/:limit", tokenVerifierMW, async (req, res) => {
     const lon = parseFloat(req.params.lon);
     const limit = parseInt(req.params.limit);
     const data = await Spot.aggregate(aggregateSpotByLocation(lon, lat, limit));
-    Spot.populate(data, populateSpot);
     if (!data) {
       res.status(400).json({
         result: false,
       });
       return;
     }
+
     res.json({
       result: true,
       data,

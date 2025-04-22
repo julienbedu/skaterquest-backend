@@ -17,12 +17,6 @@ const spotsScheme = mongoose.Schema({
   category: ["street", "park", "flat"],
   img: [String],
   creator: { type: mongoose.Schema.Types.ObjectId, ref: "users" },
-  //utile ?? peut etre juste faire une route et/ou un pipeline
-  leaderboard: {
-    alltime: [{ type: mongoose.Schema.Types.ObjectId, ref: "videos" }],
-    week: [{ type: mongoose.Schema.Types.ObjectId, ref: "videos" }],
-  },
-
   videos: [{ type: mongoose.Schema.Types.ObjectId, ref: "videos" }],
 });
 
