@@ -50,7 +50,7 @@ const { SECRET_PASSWORD_SALT } = process.env;
   - Succès : `{ result: true }`  
   - Erreur : `500` (échec Cloudinary), `400` (erreur de mise à jour).  
 
-- DELETE /delete 🔒 PROTEGE  
+- DELETE / 🔒 PROTEGE  
   *Description* : Suppression du compte utilisateur connecté.  
   *Réponse* :  
   - Succès : `{ result: true, message: "Compte supprimé avec succès" }`  
@@ -207,9 +207,8 @@ router.get("/search/:searchTerm", tokenVerifierMW, async (req, res) => {
 });
 
 //Suppression du compte utilisateur
-router.delete("/delete/:uID", tokenVerifierMW, async (req, res) => {
-  const { uID } = req.params;
-
+router.delete("/", tokenVerifierMW, async (req, res) => {
+  const { uID } = req.body;
   try {
     const deletedUser = await User.findOneAndDelete({ uID });
     if (!deletedUser) {
