@@ -224,4 +224,58 @@ router.delete("/", tokenVerifierMW, async (req, res) => {
   }
 });
 
+// Modifier le SkaterTag
+router.put("/skaterTag", tokenVerifierMW, async (req, res) => {
+  console.log("🔧 PUT /user/skaterTag BODY:", req.body);
+
+  const { uID, newSkaterTag } = req.body;
+
+  if (!newSkaterTag) {
+    console.error("Erreur : newSkaterTag manquant");
+    return res.status(400).json({
+      result: false,
+      reason: "Missing newSkaterTag",
+    });
+  }
+
+  console.log(
+    `Tentative de mise à jour du SkaterTag pour l'utilisateur ${uID} avec ${newSkaterTag}`
+  );
+
+  try {
+    // Cherche l'utilisateur
+    const user = await User.findOne({ uID });
+    if (!user) {
+      console.error("Erreur : utilisateur introuvable avec uID", uID);
+      return res
+        .status(404)
+        .json({ result: false, reason: "Utilisateur introuvable" });
+    }
+
+    // Mise à jour du SkaterTag
+    const updatedUser = await User.updateOne(
+      { uID },
+      { username: newSkaterTag }
+    );
+
+    if (updatedUser.modifiedCount === 1) {
+      console.log(`SkaterTag mis à jour avec succès pour ${uID}`);
+      return res.json({ result: true });
+    } else {
+      console.error("Aucune modification effectuée pour l'utilisateur", uID);
+      return res.status(400).json({
+        result: false,
+        reason: "Aucune modification effectuée",
+      });
+    }
+  } catch (error) {
+    console.error("Erreur lors de la mise à jour du SkaterTag", error);
+    return res.status(500).json({
+      result: false,
+      reason: "Erreur lors de la mise à jour du SkaterTag",
+      error: error.message,
+    });
+  }
+});
+
 module.exports = router;
