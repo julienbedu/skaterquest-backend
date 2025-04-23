@@ -11,6 +11,9 @@ const { generateToken, tokenVerifierMW } = require("../middleware/tokenAuth");
 const { populateUser } = require("../models/pipelines/population");
 
 const User = require("../models/users");
+const Video = require("../models/videos");
+const Crew = require("../models/crews");
+const Spot = require("../models/spots");
 const { uploadImage } = require("../lib/cloudinaryUpload");
 //Secret pour le hashage des mots de passe
 const { SECRET_PASSWORD_SALT } = process.env;
@@ -214,6 +217,23 @@ router.delete("/", tokenVerifierMW, async (req, res) => {
     if (!deletedUser) {
       return res.status(404).json({ result: false, reason: "User not found" });
     }
+
+    if (deletedUser.crew) {
+      //Suppression de l'utilisateur de son crew
+      await Crew.updateOne(
+        { _id: deletedUser.crew },
+        { $pull: { members: deletedUser._id, admins: deletedUser.uID } }
+      );
+    }
+    //suppression des video et de leur références dans spot
+    for (let videoID of deletedUser.videos) {
+      const deletedVideo = await Video.findOneAndDelete({ _id: videoID });
+      await Spot.updateOne(
+        { _id: deletedVideo.spot },
+        { $pull: { videos: videoID } }
+      );
+    }
+
     res.json({ result: true, message: "Compte supprimé avec succès" });
   } catch (error) {
     res.status(500).json({
