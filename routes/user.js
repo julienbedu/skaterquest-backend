@@ -50,6 +50,11 @@ const { SECRET_PASSWORD_SALT } = process.env;
   - Succès : `{ result: true }`  
   - Erreur : `500` (échec Cloudinary), `400` (erreur de mise à jour).  
 
+- DELETE /delete 🔒 PROTEGE  
+  *Description* : Suppression du compte utilisateur connecté.  
+  *Réponse* :  
+  - Succès : `{ result: true, message: "Compte supprimé avec succès" }`  
+  - Erreur : `404` (utilisateur introuvable), `500` (erreur serveur).  
 */
 
 // Route d'inscription
@@ -189,13 +194,35 @@ router.post("/avatar", fileUpload(), tokenVerifierMW, async (req, res) => {
 
 router.get("/search/:searchTerm", tokenVerifierMW, async (req, res) => {
   const { searchTerm } = req.params;
-  const data = await User.find({
-    username: { $regex: new RegExp(searchTerm, "gi") },
-  }, "-password -_id");
+  const data = await User.find(
+    {
+      username: { $regex: new RegExp(searchTerm, "gi") },
+    },
+    "-password -_id"
+  );
   res.json({
     result: true,
     data,
   });
+});
+
+//Suppression du compte utilisateur
+router.delete("/delete/:uID", tokenVerifierMW, async (req, res) => {
+  const { uID } = req.params;
+
+  try {
+    const deletedUser = await User.findOneAndDelete({ uID });
+    if (!deletedUser) {
+      return res.status(404).json({ result: false, reason: "User not found" });
+    }
+    res.json({ result: true, message: "Compte supprimé avec succès" });
+  } catch (error) {
+    res.status(500).json({
+      result: false,
+      reason: "Erreur serveur lors de la suppression",
+      error,
+    });
+  }
 });
 
 module.exports = router;
