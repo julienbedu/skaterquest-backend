@@ -153,7 +153,6 @@ router.put(
       { _id: userData.crew },
       {
         $pull: {
-          members: targetMongoID,
           admins: targetUserID,
         },
       }
@@ -275,6 +274,7 @@ router.put(
         {
           $pull: {
             members: _id,
+            admins: _id,
           },
         }
       );
