@@ -61,7 +61,7 @@
             e.preventDefault();
             const authToken = document.getElementById("authToken").value;
             const formData = new FormData(userAvatar);
-            await fetch('http://localhost:3000/user/avatar', {
+            await fetch('${BACK_URL/}user/avatar', {
                 method: 'POST',
                 headers: {
                     Accept: "*/*",
@@ -112,7 +112,7 @@
                 formData.append("tricks", trick)
             }
             formData.append("spot", spotID)
-            await fetch('http://localhost:3000/video', {
+            await fetch('https://skater-quest-backend.vercel.app/video', {
                 method: 'POST',
                 headers: {
                     Accept: "*/*",
@@ -121,7 +121,7 @@
                 body: formData
             });
 
-            const response = await fetch("http://localhost:3000/spot/" + spotID, {
+            const response = await fetch("https://skater-quest-backend.vercel.app/spot/" + spotID, {
                 method: "GET",
                 headers: { Authorization: authToken }
             })
