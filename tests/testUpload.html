@@ -61,7 +61,7 @@
             e.preventDefault();
             const authToken = document.getElementById("authToken").value;
             const formData = new FormData(userAvatar);
-            await fetch('${BACK_URL/}user/avatar', {
+            await fetch('http://localhost:3000/user/avatar', {
                 method: 'POST',
                 headers: {
                     Accept: "*/*",
