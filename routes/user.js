@@ -19,11 +19,10 @@ const { uploadImage } = require("../lib/cloudinaryUpload");
 const { SECRET_PASSWORD_SALT } = process.env;
 
 /*
-### User (/user)
-
+### User (/user)  
 - POST /signup  
   *Champs obligatoires : `email`, `username`, `password`*  
-  *Description* : Inscription d'un nouvel utilisateur.  
+  *Description* : Inscription d'un utilisateur.  
   *Réponse* :  
   - Succès : `{ result: true, data: { token, uID, username, email } }`  
   - Erreurs : `401` (utilisateur existant), `400` (erreur base de données).  
@@ -44,20 +43,28 @@ const { SECRET_PASSWORD_SALT } = process.env;
   *Réponse* : `{ result: true, data: user }`.  
 
 - GET /:uID 🔒 PROTEGE  
-  *Description* : Récupération des données d'un utilisateur par son uID.  
+  *Description* : Récupération des données d'un utilisateur par uID.  
   *Réponse* : `{ result: true, data: user }`.  
 
 - POST /avatar 🔒 PROTEGE 📤 FICHIER  
-  *Description* : Mise à jour de l'avatar utilisateur.  
+  *Description* : Mise à jour de l'avatar.  
   *Réponse* :  
   - Succès : `{ result: true }`  
-  - Erreur : `500` (échec Cloudinary), `400` (erreur de mise à jour).  
+  - Erreurs : `500` (Cloudinary), `400` (erreur de mise à jour).  
 
 - DELETE / 🔒 PROTEGE  
-  *Description* : Suppression du compte utilisateur connecté.  
+  *Description* : Suppression du compte.  
   *Réponse* :  
   - Succès : `{ result: true, message: "Compte supprimé avec succès" }`  
-  - Erreur : `404` (utilisateur introuvable), `500` (erreur serveur).  
+  - Erreurs : `404` (utilisateur introuvable), `500` (erreur serveur).  
+
+- PUT /skaterTag 🔒 PROTEGE  
+  *Champs obligatoires : `newSkaterTag`*  
+  *Description* : Modifier le SkaterTag (username).  
+  *Réponse* :  
+  - Succès : `{ result: true }`  
+  - Erreurs : `400` (champ manquant), `500` (erreur serveur).  
+
 */
 
 // Route d'inscription

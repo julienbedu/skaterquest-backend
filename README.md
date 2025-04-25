@@ -2,22 +2,22 @@
 
 ---
 
-### **Spot (/spot)**
+### **Spot (/spot)**  
 - **POST /** 🔒 **PROTEGE**  
   *Champs obligatoires : `name`, `lon`, `lat`, `category`*  
   *Description* : Création d'un nouveau spot.  
   *Réponse* :  
-  - Succès : `{ result: true, data: { _id: spotID } }`  
-  - Erreurs : `400` (échec d'insertion), `406` (spot trop proche).  
+  - Succès : `{ result: true, data: spot }`  
+  - Erreurs : `406` (spot trop proche), `400` (échec d'insertion).  
 
 - **GET /loc/:lon/:lat/:limit** 🔒 **PROTEGE**  
-  *Description* : Récupère les spots les plus proches d'une localisation.  
+  *Description* : Récupère les spots proches d'une localisation.  
   *Réponse* :  
   - Succès : `{ result: true, data: [spots] }`  
-  - Erreur : `400` (aucun résultat ou erreur).  
+  - Erreur : `400` (aucun résultat).  
 
 - **GET /:spotID** 🔒 **PROTEGE**  
-  *Description* : Récupération des données d'un spot par son ID.  
+  *Description* : Récupération d'un spot par son ID.  
   *Réponse* : `{ result: Boolean(data), data: spot }`.  
 
 - **POST /picture/:spotID** 🔒 **PROTEGE** 📤 **FICHIER**  
@@ -28,29 +28,10 @@
 
 ---
 
-### **Trick (/trick)**
-- **GET /**  
-  *Description* : Liste de toutes les figures disponibles.  
-  *Réponse* : `{ result: true, data: [tricks] }`.  
-
-- **PUT /validate/:trickID** 🔒 **PROTEGE**  
-  *Description* : Valider une figure pour l'utilisateur connecté.  
-  *Réponse* :  
-  - Succès : `{ result: true }`  
-  - Erreur : `400` (figure inexistante).  
-
-- **PUT /invalidate/:trickID** 🔒 **PROTEGE**  
-  *Description* : Retirer une validation de figure.  
-  *Réponse* :  
-  - Succès : `{ result: true }`  
-  - Erreur : `400` (figure inexistante).  
-
----
-
-### **Video (/video)**
+### **Video (/video)**  
 - **POST /** 🔒 **PROTEGE** 📤 **FICHIER**  
-  *Champs obligatoires : `tricks`, `spot`*  
-  *Description* : Upload d'une vidéo liée à un spot et des figures.  
+  *Champs obligatoires : `spot`*  
+  *Description* : Upload d'une vidéo.  
   *Réponse* :  
   - Succès : `{ result: true, data: video }`  
   - Erreurs : `400` (erreur base de données), `500` (échec Cloudinary).  
@@ -75,9 +56,9 @@
 
 ---
 
-### **Crew (/crew)**
+### **Crew (/crew)**  
 - **GET /:crewID** 🔒 **PROTEGE**  
-  *Description* : Récupération des données d'un crew par son ID.  
+  *Description* : Récupération des données d'un crew.  
   *Réponse* :  
   - Succès : `{ result: true, data: crew }`  
   - Erreur : `404` (crew non trouvé).  
@@ -87,16 +68,16 @@
   *Description* : Création d'un nouveau crew.  
   *Réponse* :  
   - Succès : `{ result: true, data: newCrew }`  
-  - Erreur : `400` (déjà membre d'un crew).  
+  - Erreur : `400` (déjà dans un crew).  
 
 - **PUT /promote/:targetUserID** 🔒 **PROTEGE** 🛡️ **ADMIN**  
-  *Description* : Promouvoir un membre en administrateur.  
+  *Description* : Promouvoir un membre en admin.  
   *Réponse* :  
   - Succès : `{ result: true }`  
   - Erreur : `400` (échec de promotion).  
 
 - **PUT /demote/:targetUserID** 🔒 **PROTEGE** 🛡️ **ADMIN**  
-  *Description* : Rétrograder un administrateur.  
+  *Description* : Rétrograder un admin.  
   *Réponse* :  
   - Succès : `{ result: true }`  
   - Erreur : `400` (échec de rétrogradation).  
@@ -114,17 +95,17 @@
   - Erreur : `400` (échec de suppression).  
 
 - **PUT /leave** 🔒 **PROTEGE**  
-  *Description* : Quitter son crew actuel.  
+  *Description* : Quitter son crew.  
   *Réponse* :  
   - Succès : `{ result: true }`  
-  - Erreurs : `400` (non membre ou ID invalide).  
+  - Erreurs : `400` (non membre ou erreur).  
 
 ---
 
-### **User (/user)**
+### **User (/user)**  
 - **POST /signup**  
   *Champs obligatoires : `email`, `username`, `password`*  
-  *Description* : Inscription d'un nouvel utilisateur.  
+  *Description* : Inscription d'un utilisateur.  
   *Réponse* :  
   - Succès : `{ result: true, data: { token, uID, username, email } }`  
   - Erreurs : `401` (utilisateur existant), `400` (erreur base de données).  
@@ -145,18 +126,32 @@
   *Réponse* : `{ result: true, data: user }`.  
 
 - **GET /:uID** 🔒 **PROTEGE**  
-  *Description* : Récupération des données d'un utilisateur par son uID.  
+  *Description* : Récupération des données d'un utilisateur par uID.  
   *Réponse* : `{ result: true, data: user }`.  
 
 - **POST /avatar** 🔒 **PROTEGE** 📤 **FICHIER**  
-  *Description* : Mise à jour de l'avatar utilisateur.  
+  *Description* : Mise à jour de l'avatar.  
   *Réponse* :  
   - Succès : `{ result: true }`  
-  - Erreur : `500` (échec Cloudinary), `400` (erreur de mise à jour).  
+  - Erreurs : `500` (Cloudinary), `400` (erreur de mise à jour).  
+
+- **DELETE /** 🔒 **PROTEGE**  
+  *Description* : Suppression du compte.  
+  *Réponse* :  
+  - Succès : `{ result: true, message: "Compte supprimé avec succès" }`  
+  - Erreurs : `404` (utilisateur introuvable), `500` (erreur serveur).  
+
+- **PUT /skaterTag** 🔒 **PROTEGE**  
+  *Champs obligatoires : `newSkaterTag`*  
+  *Description* : Modifier le SkaterTag (username).  
+  *Réponse* :  
+  - Succès : `{ result: true }`  
+  - Erreurs : `400` (champ manquant), `500` (erreur serveur).  
 
 --- 
 
-**Légende** :  
-- 🔒 **PROTEGE** : Authentification requise.  
-- 🛡️ **ADMIN** : Réservé aux administrateurs de crew.  
-- 📤 **FICHIER** : Route dédiée à l'envoi de fichiers.
+**Légende :**  
+- 🔒 **PROTEGE** : Route nécessitant un token valide.  
+- 🛡️ **ADMIN** : Route réservée aux administrateurs de crew.  
+- 📤 **FICHIER** : Route avec upload de fichier.  
+- *Champs obligatoires* : Liste des champs requis dans le body (vérifiés par `checkBodyMW`).

@@ -11,22 +11,22 @@ const { aggregateSpotByLocation } = require("../models/pipelines/aggregation");
 const { uploadImage } = require("../lib/cloudinaryUpload");
 
 /*
-### Spot (/spot)
+### Spot (/spot)  
 - POST / 🔒 PROTEGE  
   *Champs obligatoires : `name`, `lon`, `lat`, `category`*  
   *Description* : Création d'un nouveau spot.  
   *Réponse* :  
-  - Succès : `{ result: true, data: { _id: spotID } }`  
-  - Erreurs : `400` (échec d'insertion), `406` (spot trop proche).  
+  - Succès : `{ result: true, data: spot }`  
+  - Erreurs : `406` (spot trop proche), `400` (échec d'insertion).  
 
 - GET /loc/:lon/:lat/:limit 🔒 PROTEGE  
-  *Description* : Récupère les spots les plus proches d'une localisation.  
+  *Description* : Récupère les spots proches d'une localisation.  
   *Réponse* :  
   - Succès : `{ result: true, data: [spots] }`  
-  - Erreur : `400` (aucun résultat ou erreur).  
+  - Erreur : `400` (aucun résultat).  
 
 - GET /:spotID 🔒 PROTEGE  
-  *Description* : Récupération des données d'un spot par son ID.  
+  *Description* : Récupération d'un spot par son ID.  
   *Réponse* : `{ result: Boolean(data), data: spot }`.  
 
 - POST /picture/:spotID 🔒 PROTEGE 📤 FICHIER  

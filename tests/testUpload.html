@@ -112,7 +112,7 @@
                 formData.append("tricks", trick)
             }
             formData.append("spot", spotID)
-            await fetch('https://skater-quest-backend.vercel.app/video', {
+            await fetch('http://localhost:3000/video', {
                 method: 'POST',
                 headers: {
                     Accept: "*/*",
@@ -121,7 +121,7 @@
                 body: formData
             });
 
-            const response = await fetch("https://skater-quest-backend.vercel.app/spot/" + spotID, {
+            const response = await fetch("http://localhost:3000/spot/" + spotID, {
                 method: "GET",
                 headers: { Authorization: authToken }
             })
