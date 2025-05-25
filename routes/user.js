@@ -42,9 +42,13 @@ const { SECRET_PASSWORD_SALT } = process.env;
   *Description* : Récupération des données de l'utilisateur connecté.  
   *Réponse* : `{ result: true, data: user }`.  
 
-- GET /:uID 🔒 PROTEGE  
+- GET /:uID 🔒 PROTEGE
   *Description* : Récupération des données d'un utilisateur par uID.  
   *Réponse* : `{ result: true, data: user }`.  
+
+- GET /search/:searchTerm 🔒 PROTEGE
+  *Description* : Recherche un utilisateur par son pseudo.  
+  *Réponse* : `{ result: true, data: user }`.
 
 - POST /avatar 🔒 PROTEGE 📤 FICHIER  
   *Description* : Mise à jour de l'avatar.  

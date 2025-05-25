@@ -1,3 +1,44 @@
+Partie backend de l'application mobile SkaterQuest, développée par Julien Bédu, Thomas Poillion et Baptiste Zuber.
+
+---
+
+**Résumé des dossiers :**
+*NB : Je décris seulement ceux partagés sur GitHub.*
+
+- **api** : Aide le fonctionnement de Vercel (qui n'est pas fait pour héberger des backends persistants) :
+  - **app.js** est le fichier principal du back. L'avoir dans ce dossier permet à Vercel de le traiter comme une fonction serverless, pour pouvoir l'utiliser avec Express
+  - **index.js** sert à importer et exporter l'appli (Vercel traite toutes les requêtes via ce fichier car je l'utilise dans **vercel.json**)
+
+- **bin** : Contient le fichier **www.js** qui permet de démarrer le serveur
+
+- **dummydata** : Contient des données factices servant à tester les routes sans passer par la BDD
+
+- **lib** (library) : Contient le fichier **cloudinaryUpload.js** qui permet l'envoi des fichiers vers le service cloud Cloudinary
+
+- **middleware** : Contient les middlewares que l'on appelle dans les routes pour s'occuper de parties spécifiques :
+  - **checkBody.js** : Contrôle des saisies de l'utilisateur (pas de champ vide)
+  - **trimFields.js** : Suppression des espaces inutiles des saisies de l'utilisateur
+  - **getUserData.js** : Récupération des infos de l’utilisateur dans le corps de requête
+  - **isUserCrewAdmin.js** : Contrôle du statut d’admin dans un crew
+  - **tokenAuth.js** : Génération et contrôle des tokens (contient 2 fonctions distinctes)
+
+- **models** : Contient les schémas de BDD, ainsi qu'un dossier **pipelines** contenant 2 fichiers :
+  - **aggregation.js** : Permet de faire des requêtes complexes basées sur la géolocalisation.
+  → Plus précisément, ce fichier contient une fonction servant à trouver les spots proches d’un utilisateur, avec les vidéos associées triées par vote, et toutes les infos utiles dans un document bien structuré
+  - **population.js** : Permet de gérer les relations en clé étrangères de manière sécurisée.
+  → Plus précisément, ce fichier contient des pipelines de "population" pour peupler les références entre documents MongoDB (comme .populate() de Mongoose), sans inclure de données sensibles comme les mots de passe ou les identifiants MongoDB (_id).
+
+- **public** : Sert à stocker les fichiers statiques (images, fichiers CSS, PDF, ...) que le serveur peut servir au client sans traitement préalable. Créé par défaut mais vide actuellement car le frontend et Cloudinary ne le rendent pas utile pour le moment.
+
+- **routes** : Routes API, lire détails ci-dessous dans la 2nde section de ce README.
+
+- **tests** : Contient le fichier **testUpload.html** qui permet de tester manuellement les fonctionnalités d'upload de fichiers sur le backend (avatar de l'utilisateur, photo de spot, vidéo). Pratique pour tester rapidement les routes sans passer par un front complet, vérifier l’authentification, les formulaires et les réponses, et pour s’assurer que les fichiers sont bien uploadés et traités (via Cloudinary). N'est plus utile actuellement.
+
+- **tmp** : Dossier qui contenait des vidéos temporaires pour réaliser des tests d'affichage, n'est plus utile actuellement mais le supprimer ou le rendre vide créé un bug. À résoudre prochainement.
+
+---
+---
+
 **Résumé des routes :**
 
 ---
@@ -129,6 +170,10 @@
   *Description* : Récupération des données d'un utilisateur par uID.  
   *Réponse* : `{ result: true, data: user }`.  
 
+- **GET /search/:searchTerm** 🔒 **PROTEGE**  
+  *Description* : Recherche un utilisateur par son pseudo.  
+  *Réponse* : `{ result: true, data: user }`.
+
 - **POST /avatar** 🔒 **PROTEGE** 📤 **FICHIER**  
   *Description* : Mise à jour de l'avatar.  
   *Réponse* :  
@@ -146,7 +191,7 @@
   *Description* : Modifier le SkaterTag (username).  
   *Réponse* :  
   - Succès : `{ result: true }`  
-  - Erreurs : `400` (champ manquant), `500` (erreur serveur).  
+  - Erreurs : `400` (champ manquant), `500` (erreur serveur).
 
 --- 
 
