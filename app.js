@@ -1,6 +1,6 @@
 //Import du .env et connexion à la base de données
 require("dotenv").config();
-require("../models/connection");
+require("./models/connection");
 
 //Import d'express et ses middlewares
 var express = require("express");
@@ -27,10 +27,10 @@ app.get("/", (req, res) => {
 
 //Imports des routes
 //var indexRouter = require("../routes/index"); // Commenté car non utilisé actuellement
-var userRouter = require("../routes/user");
-var videoRouter = require("../routes/video");
-var spotRouter = require("../routes/spot");
-var crewRouter = require("../routes/crew");
+var userRouter = require("./routes/user");
+var videoRouter = require("./routes/video");
+var spotRouter = require("./routes/spot");
+var crewRouter = require("./routes/crew");
 
 //app.use("/", indexRouter); // Commenté car non utilisé actuellement
 app.use("/user", userRouter);
