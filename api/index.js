@@ -1,6 +1,5 @@
-const app = require("./app");
+const app = require('./app');
 
-// Simuler "listen()"" dans un environnement serverless (pour Vercel)
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
   app(req, res);
 };
