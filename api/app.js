@@ -12,6 +12,7 @@ const cors = require("cors");
 
 var app = express();
 
+// Route pour tester Vercel
 app.get("/ping", (req, res) => {
   res.json({ success: true, message: "Backend Vercel OK" });
 });
