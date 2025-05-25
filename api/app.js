@@ -1,7 +1,3 @@
-app.get("/ping", (req, res) => {
-  res.json({ success: true, message: "Backend Vercel OK" });
-});
-
 //Import du .env et connexion à la base de données
 require("dotenv").config();
 require("../models/connection");
@@ -15,6 +11,10 @@ const cors = require("cors");
 // const fileUpload = require("express-fileupload");
 
 var app = express();
+
+app.get("/ping", (req, res) => {
+  res.json({ success: true, message: "Backend Vercel OK" });
+});
 
 //Middleware globaux (sur toutes les routes)
 app.use(cors());
