@@ -20,11 +20,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 //app.use(express.static(path.join(__dirname, "public"))); // Commenté car gênant pour Vercel
 
-// Route pour tester Vercel
-app.get("/", (req, res) => {
-  res.json({ message: "API root OK" });
-});
-
 //Imports des routes
 //var indexRouter = require("../routes/index"); // Commenté car non utilisé actuellement
 var userRouter = require("./routes/user");
@@ -37,5 +32,10 @@ app.use("/user", userRouter);
 app.use("/video", videoRouter);
 app.use("/spot", spotRouter);
 app.use("/crew", crewRouter);
+
+// Route pour tester Vercel
+app.get("/", (req, res) => {
+  res.json({ message: "API root OK" });
+});
 
 module.exports = app;
