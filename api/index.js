@@ -1,4 +1,6 @@
-const app = require('./app');
-const serverless = require('serverless-http');
+const app = require("./app");
 
-module.exports = serverless(app);
+// Simuler "listen()"" dans un environnement serverless (pour Vercel)
+module.exports = (req, res) => {
+  app(req, res);
+};

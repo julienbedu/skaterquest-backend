@@ -12,11 +12,6 @@ const cors = require("cors");
 
 var app = express();
 
-// Route pour tester Vercel
-app.get("/", (req, res) => {
-  res.json({ success: true, message: "Backend Vercel OK" });
-});
-
 //Middleware globaux (sur toutes les routes)
 app.use(cors());
 app.use(logger("dev"));
@@ -25,8 +20,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 //app.use(express.static(path.join(__dirname, "public"))); // Commenté car gênant pour Vercel
 
+// Route pour tester Vercel
+app.get("/", (req, res) => {
+  res.json({ message: "API root OK" });
+});
+
 //Imports des routes
-var indexRouter = require("../routes/index");
+//var indexRouter = require("../routes/index"); // Commenté car non utilisé actuellement
 var userRouter = require("../routes/user");
 var videoRouter = require("../routes/video");
 var spotRouter = require("../routes/spot");
