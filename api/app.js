@@ -1,3 +1,7 @@
+app.get("/ping", (req, res) => {
+  res.json({ success: true, message: "Backend Vercel OK" });
+});
+
 //Import du .env et connexion à la base de données
 require("dotenv").config();
 require("../models/connection");
@@ -18,7 +22,7 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
+//app.use(express.static(path.join(__dirname, "public"))); // Commenté car gênant pour Vercel
 
 //Imports des routes
 var indexRouter = require("../routes/index");
@@ -27,7 +31,7 @@ var videoRouter = require("../routes/video");
 var spotRouter = require("../routes/spot");
 var crewRouter = require("../routes/crew");
 
-app.use("/", indexRouter);
+//app.use("/", indexRouter); // Commenté car non utilisé actuellement
 app.use("/user", userRouter);
 app.use("/video", videoRouter);
 app.use("/spot", spotRouter);
