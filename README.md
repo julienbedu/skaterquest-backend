@@ -3,7 +3,7 @@ Partie backend de l'application mobile SkaterQuest, développée par Julien Béd
 ---
 
 **Résumé des dossiers :**
-*NB : Je décris seulement ceux partagés sur GitHub.*
+*(NB : Je décris seulement ceux partagés sur GitHub)*
 
 - **api** : Aide le fonctionnement de Vercel (qui n'est pas fait pour héberger des backends persistants) :
   - **app.js** est le fichier principal du back. L'avoir dans ce dossier permet à Vercel de le traiter comme une fonction serverless, pour pouvoir l'utiliser avec Express
