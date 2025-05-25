@@ -21,6 +21,7 @@
     "mongoose": "^8.13.2",
     "morgan": "~1.9.1",
     "node-fetch": "2",
+    "serverless-http": "^3.2.0",
     "uid2": "^1.0.0",
     "uniqid": "^5.4.0"
   },
