@@ -1,3 +1,5 @@
+# SkaterQuest - Frontend
+
 Partie backend de l'application mobile SkaterQuest, développée par Julien Bédu, Thomas Poillion et Baptiste Zuber.
 
 ---
