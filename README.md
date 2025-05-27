@@ -2,6 +2,8 @@
 
 Partie backend de l'application mobile SkaterQuest, développée par Julien Bédu, Thomas Poillion et Baptiste Zuber.
 
+Lien de déploiement (Vercel) : https://skaterquest-backend.vercel.app/
+
 ---
 
 **Résumé des dossiers :**
